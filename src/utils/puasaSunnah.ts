@@ -1,4 +1,5 @@
 import moment from 'moment-hijri';
+import type { AppLanguage } from '@/i18n';
 
 export interface FadilahItem {
   judul: string;
@@ -344,10 +345,16 @@ export const PUASA_DATA: Record<string, PuasaItem> = {
 // ─────────────────────────────────────────────
 // NAMA BULAN HIJRIAH
 // ─────────────────────────────────────────────
-export const NAMA_BULAN_HIJRI: string[] = [
+export const NAMA_BULAN_HIJRI_ID: string[] = [
   '', 'Muharram', 'Safar', 'Rabiul Awal', 'Rabiul Akhir',
   'Jumadil Awal', 'Jumadil Akhir', 'Rajab', "Sya'ban",
   'Ramadan', 'Syawal', 'Dzulqadah', 'Dzulhijjah',
+];
+
+export const NAMA_BULAN_HIJRI_EN: string[] = [
+  '', 'Muharram', 'Safar', 'Rabi al-Awwal', 'Rabi al-Thani',
+  'Jumada al-Awwal', 'Jumada al-Thani', 'Rajab', "Sha'ban",
+  'Ramadan', 'Shawwal', 'Dhu al-Qadah', 'Dhu al-Hijjah',
 ];
 
 // ─────────────────────────────────────────────
@@ -438,15 +445,16 @@ export function generateMarkedDates(year: number, month: number): Record<string,
 // ─────────────────────────────────────────────
 // HELPER: Info Hijriah dari dateString
 // ─────────────────────────────────────────────
-export function getHijriInfo(dateString: string): HijriInfo {
+export function getHijriInfo(dateString: string, language: AppLanguage = 'id'): HijriInfo {
   const m = createHijriMoment(dateString);
   const monthNum = m.iMonth() + 1;
+  const monthNames = language === 'id' ? NAMA_BULAN_HIJRI_ID : NAMA_BULAN_HIJRI_EN;
   return {
     day: m.iDate(),
     month: monthNum,
     year: m.iYear(),
-    monthName: NAMA_BULAN_HIJRI[monthNum],
-    fullDate: `${m.iDate()} ${NAMA_BULAN_HIJRI[monthNum]} ${m.iYear()} H`,
+    monthName: monthNames[monthNum],
+    fullDate: `${m.iDate()} ${monthNames[monthNum]} ${m.iYear()} H`,
   };
 }
 

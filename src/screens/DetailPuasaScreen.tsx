@@ -1,8 +1,12 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   View, Text, ScrollView, TouchableOpacity,
   StyleSheet, StatusBar, Platform, Share,
 } from 'react-native';
+
+import LanguageSwitcher from '@/components/LanguageSwitcher';
+import { translatePuasaItem } from '@/utils/translatePuasa';
 import type { FadilahItem, PuasaItem } from '@/utils/puasaSunnah';
 
 interface DetailPuasaScreenProps {
@@ -22,21 +26,27 @@ interface FadilahCardProps {
 }
 
 export default function DetailPuasaScreen({ puasa, onBack }: DetailPuasaScreenProps) {
+  const { t } = useTranslation();
+
   if (!puasa) {
     return (
       <View style={styles.emptyRoot}>
-        <Text style={styles.emptyTitle}>Data puasa tidak ditemukan.</Text>
+        <Text style={styles.emptyTitle}>{t('detail.notFound')}</Text>
         <TouchableOpacity style={styles.emptyBackButton} onPress={onBack}>
-          <Text style={styles.emptyBackText}>Kembali</Text>
+          <Text style={styles.emptyBackText}>{t('detail.back')}</Text>
         </TouchableOpacity>
       </View>
     );
   }
 
+  const localizedPuasa = translatePuasaItem(t, puasa);
+
   const handleShare = async () => {
     try {
       await Share.share({
-        message: `📿 ${puasa.nama}\n\n${puasa.deskripsiSingkat}\n\n🌙 Niat:\n${puasa.niatLatin}\n\nArtinya: "${puasa.niatArtinya}"\n\nFadilah:\n${puasa.fadilah.map((f, i) => `${i + 1}. ${f.judul}\n${f.isi}\n(${f.sumber})`).join('\n\n')}`,
+        message: `📿 ${localizedPuasa.nama}\n\n${localizedPuasa.deskripsiSingkat}\n\n🌙 Niat:\n${localizedPuasa.niatLatin}\n\n${t('detail.meaningLabel')} "${localizedPuasa.niatArtinya}"\n\n${t('detail.shareTitle')}:\n${localizedPuasa.fadilah
+          .map((f, i) => `${i + 1}. ${f.judul}\n${f.isi}\n(${f.sumber})`)
+          .join('\n\n')}`,
       });
     } catch (error) {
       console.log(error);
@@ -45,23 +55,22 @@ export default function DetailPuasaScreen({ puasa, onBack }: DetailPuasaScreenPr
 
   return (
     <View style={styles.root}>
-      <StatusBar barStyle="light-content" backgroundColor={puasa.color} />
+      <StatusBar barStyle="light-content" backgroundColor={localizedPuasa.color} />
 
-      {/* Header dengan warna khas puasa */}
-      <View style={[styles.header, { backgroundColor: puasa.color }]}>
-        <TouchableOpacity
-          style={styles.backButton}
-          onPress={onBack}
-        >
-          <Text style={styles.backText}>‹ Kembali</Text>
-        </TouchableOpacity>
+      <View style={[styles.header, { backgroundColor: localizedPuasa.color }]}>
+        <View style={styles.headerTopRow}>
+          <TouchableOpacity style={styles.backButton} onPress={onBack}>
+            <Text style={styles.backText}>‹ {t('detail.back')}</Text>
+          </TouchableOpacity>
+          <LanguageSwitcher />
+        </View>
 
         <View style={styles.headerContent}>
-          <Text style={styles.headerIcon}>{puasa.icon}</Text>
-          <Text style={styles.headerTitle}>{puasa.nama}</Text>
-          <Text style={styles.headerArabic}>{puasa.arabicName}</Text>
+          <Text style={styles.headerIcon}>{localizedPuasa.icon}</Text>
+          <Text style={styles.headerTitle}>{localizedPuasa.nama}</Text>
+          <Text style={styles.headerArabic}>{localizedPuasa.arabicName}</Text>
           <View style={styles.kategoriPill}>
-            <Text style={styles.kategoriText}>{puasa.kategori}</Text>
+            <Text style={styles.kategoriText}>{localizedPuasa.kategori}</Text>
           </View>
         </View>
       </View>
@@ -71,45 +80,38 @@ export default function DetailPuasaScreen({ puasa, onBack }: DetailPuasaScreenPr
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.scrollContent}
       >
-        {/* Deskripsi singkat */}
         <View style={styles.descCard}>
-          <Text style={styles.descText}>{puasa.deskripsiSingkat}</Text>
+          <Text style={styles.descText}>{localizedPuasa.deskripsiSingkat}</Text>
         </View>
 
-        {/* Fadilah */}
-        <SectionTitle title="✨ Keutamaan & Fadilah" color={puasa.color} />
+        <SectionTitle title={t('detail.virtueSection')} color={localizedPuasa.color} />
 
-        {puasa.fadilah.map((item, idx) => (
+        {localizedPuasa.fadilah.map((item, idx) => (
           <FadilahCard
             key={`${item.judul}-${idx}`}
             index={idx + 1}
             item={item}
-            color={puasa.color}
+            color={localizedPuasa.color}
           />
         ))}
 
-        {/* Niat */}
-        <SectionTitle title="🤲 Niat Puasa" color={puasa.color} />
+        <SectionTitle title={t('detail.niatSection')} color={localizedPuasa.color} />
 
         <View style={styles.niatCard}>
-          {/* Arab */}
-          <Text style={styles.niatArab}>{puasa.niat}</Text>
+          <Text style={styles.niatArab}>{localizedPuasa.niat}</Text>
           <View style={styles.divider} />
-          {/* Latin */}
-          <Text style={styles.niatLatin}>{puasa.niatLatin}</Text>
+          <Text style={styles.niatLatin}>{localizedPuasa.niatLatin}</Text>
           <View style={styles.divider} />
-          {/* Arti */}
-          <Text style={styles.niatLabel}>Artinya:</Text>
-          <Text style={styles.niatArti}>"{puasa.niatArtinya}"</Text>
+          <Text style={styles.niatLabel}>{t('detail.meaningLabel')}</Text>
+          <Text style={styles.niatArti}>"{localizedPuasa.niatArtinya}"</Text>
         </View>
 
-        {/* Tombol Share */}
         <TouchableOpacity
-          style={[styles.shareButton, { backgroundColor: puasa.color }]}
+          style={[styles.shareButton, { backgroundColor: localizedPuasa.color }]}
           onPress={handleShare}
           activeOpacity={0.85}
         >
-          <Text style={styles.shareText}>🔗 Bagikan Info Puasa Ini</Text>
+          <Text style={styles.shareText}>{t('detail.shareButton')}</Text>
         </TouchableOpacity>
 
         <View style={{ height: 40 }} />
@@ -157,6 +159,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
     color: '#1a1a1a',
+    textAlign: 'center',
   },
   emptyBackButton: {
     backgroundColor: '#1B5E20',
@@ -177,8 +180,16 @@ const styles = StyleSheet.create({
     paddingBottom: 28,
     paddingHorizontal: 20,
   },
-  backButton: {
+  headerTopRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
     marginBottom: 16,
+    gap: 10,
+  },
+  backButton: {
+    marginBottom: 0,
+    paddingTop: 2,
   },
   backText: {
     color: 'rgba(255,255,255,0.85)',

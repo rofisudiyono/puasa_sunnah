@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { getHijriInfo } from '@/utils/puasaSunnah';
+import type { AppLanguage } from '@/i18n';
 
 export interface CalendarDateCell {
   dateString: string;
@@ -23,15 +24,22 @@ interface HijriDayComponentProps {
   date?: CalendarDateCell;
   state?: string;
   marking?: DayMarking;
+  language?: AppLanguage;
   onPress: (date: CalendarDateCell) => void;
 }
 
-export default function HijriDayComponent({ date, state, marking, onPress }: HijriDayComponentProps) {
+export default function HijriDayComponent({
+  date,
+  state,
+  marking,
+  language = 'id',
+  onPress,
+}: HijriDayComponentProps) {
   if (!date) {
     return null;
   }
 
-  const hijri = getHijriInfo(date.dateString);
+  const hijri = getHijriInfo(date.dateString, language);
   const isToday = state === 'today';
   const isDisabled = state === 'disabled';
   const isSelected = Boolean(marking?.selected);
@@ -94,7 +102,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   todayCircle: {
-    backgroundColor: '#1B5E20',
+    borderWidth: 2,
+    borderColor: '#1B5E20',
+    backgroundColor: '#FFFFFF',
   },
   selectedCircle: {
     backgroundColor: '#E8F5E9',
@@ -107,7 +117,7 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   todayText: {
-    color: '#fff',
+    color: '#1B5E20',
     fontWeight: '700',
   },
   selectedText: {

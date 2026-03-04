@@ -1,30 +1,81 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useRouter } from 'expo-router';
+import { useTranslation } from 'react-i18next';
 import {
   View, Text, ScrollView, TouchableOpacity,
   StyleSheet, StatusBar, Platform,
 } from 'react-native';
-import { Calendar } from 'react-native-calendars';
+import { Calendar, LocaleConfig } from 'react-native-calendars';
 import moment from 'moment-hijri';
 import 'moment/locale/id';
 
+import LanguageSwitcher from '@/components/LanguageSwitcher';
+import HijriDayComponent, { type CalendarDateCell } from '@/components/HijriDayComponent';
+import { normalizeLanguage } from '@/i18n';
+import { translatePuasaItem } from '@/utils/translatePuasa';
 import {
   type CalendarMarking,
   generateMarkedDates,
   getPuasaOnDate,
   getHijriInfo,
 } from '@/utils/puasaSunnah';
-import HijriDayComponent, { type CalendarDateCell } from '@/components/HijriDayComponent';
 
-moment.locale('id');
+LocaleConfig.locales.id = {
+  monthNames: [
+    'Januari',
+    'Februari',
+    'Maret',
+    'April',
+    'Mei',
+    'Juni',
+    'Juli',
+    'Agustus',
+    'September',
+    'Oktober',
+    'November',
+    'Desember',
+  ],
+  monthNamesShort: ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'],
+  dayNames: ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'],
+  dayNamesShort: ['Min', 'Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab'],
+  today: 'Hari Ini',
+};
+
+LocaleConfig.locales.en = {
+  monthNames: [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
+  ],
+  monthNamesShort: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+  dayNames: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+  dayNamesShort: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+  today: 'Today',
+};
 
 interface CalendarMonth {
   year: number;
   month: number;
 }
 
+interface LegendItem {
+  color: string;
+  labelKey: string;
+}
+
 export default function CalendarScreen() {
   const router = useRouter();
+  const { t, i18n } = useTranslation();
+  const language = normalizeLanguage(i18n.resolvedLanguage ?? i18n.language);
   const today = moment().format('YYYY-MM-DD');
 
   const [selectedDate, setSelectedDate] = useState(today);
@@ -34,11 +85,14 @@ export default function CalendarScreen() {
     month: moment().month() + 1,
   });
 
-  // Build marked dates setiap bulan berubah atau tanggal dipilih
+  useEffect(() => {
+    moment.locale(language);
+    LocaleConfig.defaultLocale = language;
+  }, [language]);
+
   const buildMarked = useCallback(() => {
     const marked = generateMarkedDates(currentMonth.year, currentMonth.month);
 
-    // Override selected date
     const existing = marked[selectedDate];
     marked[selectedDate] = {
       ...(existing || { dots: [], marked: true }),
@@ -61,23 +115,27 @@ export default function CalendarScreen() {
     setCurrentMonth({ year: month.year, month: month.month });
   };
 
-  const puasaHariIni = getPuasaOnDate(selectedDate);
-  const hijri = getHijriInfo(selectedDate);
-  const formattedDate = moment(selectedDate).format('dddd, D MMMM YYYY');
+  const puasaHariIni = useMemo(
+    () => getPuasaOnDate(selectedDate).map((item) => translatePuasaItem(t, item)),
+    [selectedDate, t],
+  );
+
+  const hijri = getHijriInfo(selectedDate, language);
+  const formattedDate = moment(selectedDate).locale(language).format('dddd, D MMMM YYYY');
 
   return (
     <View style={styles.root}>
       <StatusBar barStyle="light-content" backgroundColor="#1B5E20" />
 
-      {/* Header */}
       <View style={styles.header}>
-        <Text style={styles.headerTitle}>Kalender Puasa Sunnah</Text>
+        <View style={styles.headerTop}>
+          <Text style={styles.headerTitle}>{t('calendar.title')}</Text>
+          <LanguageSwitcher />
+        </View>
         <Text style={styles.headerSubtitle}>{hijri.fullDate}</Text>
       </View>
 
       <ScrollView showsVerticalScrollIndicator={false}>
-
-        {/* Kalender */}
         <View style={styles.calendarWrapper}>
           <Calendar
             current={today}
@@ -88,6 +146,7 @@ export default function CalendarScreen() {
             dayComponent={(props: any) => (
               <HijriDayComponent
                 {...props}
+                language={language}
                 onPress={handleDayPress}
               />
             )}
@@ -105,10 +164,8 @@ export default function CalendarScreen() {
           />
         </View>
 
-        {/* Legenda */}
         <LegendSection />
 
-        {/* Detail Tanggal Terpilih */}
         <View style={styles.detailSection}>
           <View style={styles.detailHeader}>
             <Text style={styles.detailDate}>{formattedDate}</Text>
@@ -118,12 +175,12 @@ export default function CalendarScreen() {
           {puasaHariIni.length === 0 ? (
             <View style={styles.emptyCard}>
               <Text style={styles.emptyIcon}>☀️</Text>
-              <Text style={styles.emptyText}>Tidak ada puasa sunnah hari ini</Text>
+              <Text style={styles.emptyText}>{t('calendar.empty')}</Text>
             </View>
           ) : (
             <>
               <Text style={styles.sectionLabel}>
-                {puasaHariIni.length} Puasa Sunnah Tersedia
+                {t('calendar.availableFastings', { count: puasaHariIni.length })}
               </Text>
               {puasaHariIni.map((puasa) => (
                 <TouchableOpacity
@@ -161,25 +218,26 @@ export default function CalendarScreen() {
 }
 
 function LegendSection() {
-  const legends = [
-    { color: '#4CAF50', label: 'Senin & Kamis' },
-    { color: '#2196F3', label: 'Ayyamul Bidh' },
-    { color: '#FF9800', label: 'Arafah' },
-    { color: '#673AB7', label: 'Asyura' },
-    { color: '#00BCD4', label: 'Syawal' },
-    { color: '#FF5722', label: "Sya'ban" },
-    { color: '#FFC107', label: 'Dzulhijjah' },
-    { color: '#E91E63', label: 'Rajab' },
+  const { t } = useTranslation();
+  const legends: LegendItem[] = [
+    { color: '#4CAF50', labelKey: 'calendar.legend.seninKamis' },
+    { color: '#2196F3', labelKey: 'calendar.legend.ayyamulBidh' },
+    { color: '#FF9800', labelKey: 'calendar.legend.arafah' },
+    { color: '#673AB7', labelKey: 'calendar.legend.asyura' },
+    { color: '#00BCD4', labelKey: 'calendar.legend.syawal' },
+    { color: '#FF5722', labelKey: 'calendar.legend.syaban' },
+    { color: '#FFC107', labelKey: 'calendar.legend.dzulhijjah' },
+    { color: '#E91E63', labelKey: 'calendar.legend.rajab' },
   ];
 
   return (
     <View style={styles.legendSection}>
-      <Text style={styles.legendTitle}>Keterangan Warna</Text>
+      <Text style={styles.legendTitle}>{t('calendar.legendTitle')}</Text>
       <View style={styles.legendGrid}>
         {legends.map((item) => (
-          <View key={item.label} style={styles.legendItem}>
+          <View key={item.labelKey} style={styles.legendItem}>
             <View style={[styles.legendDot, { backgroundColor: item.color }]} />
-            <Text style={styles.legendLabel}>{item.label}</Text>
+            <Text style={styles.legendLabel}>{t(item.labelKey)}</Text>
           </View>
         ))}
       </View>
@@ -198,7 +256,14 @@ const styles = StyleSheet.create({
     paddingBottom: 20,
     paddingHorizontal: 20,
   },
+  headerTop: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+    gap: 12,
+  },
   headerTitle: {
+    flex: 1,
     fontSize: 20,
     fontWeight: '700',
     color: '#fff',
@@ -207,7 +272,7 @@ const styles = StyleSheet.create({
   headerSubtitle: {
     fontSize: 13,
     color: '#A5D6A7',
-    marginTop: 4,
+    marginTop: 8,
   },
   calendarWrapper: {
     backgroundColor: '#fff',

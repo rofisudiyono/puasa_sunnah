@@ -4,6 +4,7 @@ import React from 'react';
 import { useColorScheme } from 'react-native';
 
 import { AnimatedSplashOverlay } from '@/components/animated-icon';
+import '@/i18n';
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
