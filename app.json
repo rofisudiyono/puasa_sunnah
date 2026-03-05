@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "puasa_sunnah",
+    "name": "Puasa Sunnah",
     "slug": "puasa_sunnah",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -8,7 +8,8 @@
     "scheme": "puasasunnah",
     "userInterfaceStyle": "automatic",
     "ios": {
-      "icon": "./assets/expo.icon"
+      "icon": "./assets/images/icon.png",
+      "bundleIdentifier": "com.arashy.puasasunnah"
     },
     "android": {
       "adaptiveIcon": {
@@ -17,7 +18,8 @@
         "backgroundImage": "./assets/images/android-icon-background.png",
         "monochromeImage": "./assets/images/android-icon-monochrome.png"
       },
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "package": "com.arashy.puasasunnah"
     },
     "web": {
       "output": "static",

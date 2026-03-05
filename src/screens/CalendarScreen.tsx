@@ -72,6 +72,17 @@ interface LegendItem {
   labelKey: string;
 }
 
+const LEGEND_ITEMS: LegendItem[] = [
+  { color: '#4CAF50', labelKey: 'calendar.legend.seninKamis' },
+  { color: '#2196F3', labelKey: 'calendar.legend.ayyamulBidh' },
+  { color: '#FF9800', labelKey: 'calendar.legend.arafah' },
+  { color: '#673AB7', labelKey: 'calendar.legend.asyura' },
+  { color: '#00BCD4', labelKey: 'calendar.legend.syawal' },
+  { color: '#FF5722', labelKey: 'calendar.legend.syaban' },
+  { color: '#FFC107', labelKey: 'calendar.legend.dzulhijjah' },
+  { color: '#E91E63', labelKey: 'calendar.legend.rajab' },
+];
+
 export default function CalendarScreen() {
   const router = useRouter();
   const { t, i18n } = useTranslation();
@@ -219,22 +230,12 @@ export default function CalendarScreen() {
 
 function LegendSection() {
   const { t } = useTranslation();
-  const legends: LegendItem[] = [
-    { color: '#4CAF50', labelKey: 'calendar.legend.seninKamis' },
-    { color: '#2196F3', labelKey: 'calendar.legend.ayyamulBidh' },
-    { color: '#FF9800', labelKey: 'calendar.legend.arafah' },
-    { color: '#673AB7', labelKey: 'calendar.legend.asyura' },
-    { color: '#00BCD4', labelKey: 'calendar.legend.syawal' },
-    { color: '#FF5722', labelKey: 'calendar.legend.syaban' },
-    { color: '#FFC107', labelKey: 'calendar.legend.dzulhijjah' },
-    { color: '#E91E63', labelKey: 'calendar.legend.rajab' },
-  ];
 
   return (
     <View style={styles.legendSection}>
       <Text style={styles.legendTitle}>{t('calendar.legendTitle')}</Text>
       <View style={styles.legendGrid}>
-        {legends.map((item) => (
+        {LEGEND_ITEMS.map((item) => (
           <View key={item.labelKey} style={styles.legendItem}>
             <View style={[styles.legendDot, { backgroundColor: item.color }]} />
             <Text style={styles.legendLabel}>{t(item.labelKey)}</Text>
@@ -286,36 +287,42 @@ const styles = StyleSheet.create({
   legendSection: {
     backgroundColor: '#fff',
     marginTop: 8,
-    padding: 16,
+    paddingHorizontal: 16,
+    paddingVertical: 14,
   },
   legendTitle: {
     fontSize: 12,
-    fontWeight: '600',
-    color: '#757575',
-    marginBottom: 10,
+    fontWeight: '700',
+    color: '#5E6A71',
+    marginBottom: 12,
     textTransform: 'uppercase',
     letterSpacing: 0.8,
   },
   legendGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: 8,
+    justifyContent: 'space-between',
+    rowGap: 10,
+    columnGap: 8,
   },
   legendItem: {
+    width: '48%',
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 4,
-    marginRight: 8,
-    marginBottom: 4,
+    gap: 8,
   },
   legendDot: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
+    width: 12,
+    height: 12,
+    borderRadius: 6,
+    borderWidth: 1,
+    borderColor: '#FFFFFF',
   },
   legendLabel: {
-    fontSize: 11,
-    color: '#616161',
+    flexShrink: 1,
+    fontSize: 13,
+    color: '#40505A',
+    fontWeight: '500',
   },
   detailSection: {
     marginTop: 8,
