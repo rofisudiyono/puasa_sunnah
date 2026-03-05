@@ -4,6 +4,7 @@ import {
   View, Text, ScrollView, TouchableOpacity,
   StyleSheet, StatusBar, Platform, Share,
 } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import LanguageSwitcher from '@/components/LanguageSwitcher';
 import { translatePuasaItem } from '@/utils/translatePuasa';
@@ -27,6 +28,7 @@ interface FadilahCardProps {
 
 export default function DetailPuasaScreen({ puasa, onBack }: DetailPuasaScreenProps) {
   const { t } = useTranslation();
+  const insets = useSafeAreaInsets();
 
   if (!puasa) {
     return (
@@ -57,7 +59,12 @@ export default function DetailPuasaScreen({ puasa, onBack }: DetailPuasaScreenPr
     <View style={styles.root}>
       <StatusBar barStyle="light-content" backgroundColor={localizedPuasa.color} />
 
-      <View style={[styles.header, { backgroundColor: localizedPuasa.color }]}>
+      <View
+        style={[
+          styles.header,
+          { backgroundColor: localizedPuasa.color, paddingTop: insets.top + 10 },
+        ]}
+      >
         <View style={styles.headerTopRow}>
           <TouchableOpacity style={styles.backButton} onPress={onBack}>
             <Text style={styles.backText}>‹ {t('detail.back')}</Text>
@@ -176,7 +183,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#F7F7F7',
   },
   header: {
-    paddingTop: Platform.OS === 'android' ? 16 : 52,
     paddingBottom: 28,
     paddingHorizontal: 20,
   },

@@ -4,7 +4,11 @@ import { useTranslation } from 'react-i18next';
 
 import { normalizeLanguage, type AppLanguage } from '@/i18n';
 
-export default function LanguageSwitcher() {
+interface LanguageSwitcherProps {
+  compact?: boolean;
+}
+
+export default function LanguageSwitcher({ compact = false }: LanguageSwitcherProps) {
   const { i18n, t } = useTranslation();
   const activeLanguage = normalizeLanguage(i18n.resolvedLanguage ?? i18n.language);
 
@@ -17,16 +21,20 @@ export default function LanguageSwitcher() {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.label}>{t('common.language')}</Text>
-      <View style={styles.segmentedControl}>
+    <View style={[styles.container, compact && styles.containerCompact]}>
+      {!compact && <Text style={styles.label}>{t('common.language')}</Text>}
+      <View style={[styles.segmentedControl, compact && styles.segmentedControlCompact]}>
         {(['id', 'en'] as AppLanguage[]).map((language) => {
           const isActive = activeLanguage === language;
 
           return (
             <Pressable
               key={language}
-              style={[styles.optionButton, isActive && styles.optionButtonActive]}
+              style={[
+                styles.optionButton,
+                compact && styles.optionButtonCompact,
+                isActive && styles.optionButtonActive,
+              ]}
               onPress={() => switchLanguage(language)}>
               <Text style={[styles.optionText, isActive && styles.optionTextActive]}>
                 {language.toUpperCase()}
@@ -44,6 +52,9 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
     gap: 4,
   },
+  containerCompact: {
+    gap: 0,
+  },
   label: {
     color: '#E8F5E9',
     fontSize: 11,
@@ -55,12 +66,20 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255,255,255,0.22)',
     padding: 2,
   },
+  segmentedControlCompact: {
+    backgroundColor: 'rgba(255,255,255,0.26)',
+  },
   optionButton: {
     minWidth: 42,
     paddingVertical: 4,
     paddingHorizontal: 10,
     borderRadius: 999,
     alignItems: 'center',
+  },
+  optionButtonCompact: {
+    minWidth: 38,
+    paddingVertical: 3,
+    paddingHorizontal: 9,
   },
   optionButtonActive: {
     backgroundColor: '#FFFFFF',

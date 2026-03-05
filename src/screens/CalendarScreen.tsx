@@ -3,9 +3,10 @@ import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import {
   View, Text, ScrollView, TouchableOpacity,
-  StyleSheet, StatusBar, Platform,
+  StyleSheet, StatusBar,
 } from 'react-native';
 import { Calendar, LocaleConfig } from 'react-native-calendars';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import moment from 'moment-hijri';
 import 'moment/locale/id';
 
@@ -89,6 +90,7 @@ const LEGEND_ITEMS: LegendItem[] = [
 export default function CalendarScreen() {
   const router = useRouter();
   const { t, i18n } = useTranslation();
+  const insets = useSafeAreaInsets();
   const language = normalizeLanguage(i18n.resolvedLanguage ?? i18n.language);
   const today = moment().format('YYYY-MM-DD');
 
@@ -149,10 +151,19 @@ export default function CalendarScreen() {
     <View style={styles.root}>
       <StatusBar barStyle="light-content" backgroundColor="#1B5E20" />
 
-      <View style={styles.header}>
+      <View style={[styles.header, { paddingTop: insets.top + 10 }]}>
         <View style={styles.headerTop}>
           <Text style={styles.headerTitle}>{t('calendar.title')}</Text>
-          <LanguageSwitcher />
+          <View style={styles.headerActions}>
+            <LanguageSwitcher compact />
+            <TouchableOpacity
+              style={styles.aboutButton}
+              onPress={() => router.push('/about')}
+              activeOpacity={0.8}
+            >
+              <Text style={styles.aboutButtonText}>i</Text>
+            </TouchableOpacity>
+          </View>
         </View>
         <Text style={styles.headerSubtitle}>{hijri.fullDate}</Text>
       </View>
@@ -268,27 +279,48 @@ const styles = StyleSheet.create({
   },
   header: {
     backgroundColor: '#1B5E20',
-    paddingTop: Platform.OS === 'android' ? 16 : 52,
-    paddingBottom: 20,
+    paddingBottom: 16,
     paddingHorizontal: 20,
   },
   headerTop: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'flex-start',
-    gap: 12,
+    alignItems: 'center',
+    gap: 10,
+  },
+  headerActions: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+  },
+  aboutButton: {
+    backgroundColor: 'rgba(255,255,255,0.2)',
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.4)',
+    borderRadius: 15,
+    width: 30,
+    height: 30,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  aboutButtonText: {
+    color: '#FFFFFF',
+    fontSize: 16,
+    fontWeight: '800',
+    lineHeight: 18,
   },
   headerTitle: {
     flex: 1,
-    fontSize: 20,
-    fontWeight: '700',
+    fontSize: 22,
+    lineHeight: 28,
+    fontWeight: '800',
     color: '#fff',
     letterSpacing: 0.3,
   },
   headerSubtitle: {
     fontSize: 13,
     color: '#A5D6A7',
-    marginTop: 8,
+    marginTop: 10,
   },
   calendarWrapper: {
     backgroundColor: '#fff',
