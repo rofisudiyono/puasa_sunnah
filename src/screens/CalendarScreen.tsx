@@ -68,19 +68,22 @@ interface CalendarMonth {
 }
 
 interface LegendItem {
+  id: string;
   color: string;
   labelKey: string;
 }
 
 const LEGEND_ITEMS: LegendItem[] = [
-  { color: '#4CAF50', labelKey: 'calendar.legend.seninKamis' },
-  { color: '#2196F3', labelKey: 'calendar.legend.ayyamulBidh' },
-  { color: '#FF9800', labelKey: 'calendar.legend.arafah' },
-  { color: '#673AB7', labelKey: 'calendar.legend.asyura' },
-  { color: '#00BCD4', labelKey: 'calendar.legend.syawal' },
-  { color: '#FF5722', labelKey: 'calendar.legend.syaban' },
-  { color: '#FFC107', labelKey: 'calendar.legend.dzulhijjah' },
-  { color: '#E91E63', labelKey: 'calendar.legend.rajab' },
+  { id: 'senin_kamis', color: '#4CAF50', labelKey: 'calendar.legend.seninKamis' },
+  { id: 'ayyamul_bidh', color: '#2196F3', labelKey: 'calendar.legend.ayyamulBidh' },
+  { id: 'arafah', color: '#FF9800', labelKey: 'calendar.legend.arafah' },
+  { id: 'tasua', color: '#9C27B0', labelKey: 'calendar.legend.tasua' },
+  { id: 'asyura', color: '#673AB7', labelKey: 'calendar.legend.asyura' },
+  { id: 'syawal', color: '#00BCD4', labelKey: 'calendar.legend.syawal' },
+  { id: 'syaban', color: '#FF5722', labelKey: 'calendar.legend.syaban' },
+  { id: 'nisfu_syaban', color: '#FF7043', labelKey: 'calendar.legend.nisfuSyaban' },
+  { id: 'dzulhijjah', color: '#FFC107', labelKey: 'calendar.legend.dzulhijjah' },
+  { id: 'rajab', color: '#E91E63', labelKey: 'calendar.legend.rajab' },
 ];
 
 export default function CalendarScreen() {
@@ -130,6 +133,14 @@ export default function CalendarScreen() {
     () => getPuasaOnDate(selectedDate).map((item) => translatePuasaItem(t, item)),
     [selectedDate, t],
   );
+  const visibleLegends = useMemo(() => {
+    const activeLegendIds = new Set<string>();
+    Object.values(markedDates).forEach((dateMarking) => {
+      dateMarking.dots.forEach((dot) => activeLegendIds.add(dot.key));
+    });
+
+    return LEGEND_ITEMS.filter((item) => activeLegendIds.has(item.id));
+  }, [markedDates]);
 
   const hijri = getHijriInfo(selectedDate, language);
   const formattedDate = moment(selectedDate).locale(language).format('dddd, D MMMM YYYY');
@@ -175,7 +186,7 @@ export default function CalendarScreen() {
           />
         </View>
 
-        <LegendSection />
+        <LegendSection legends={visibleLegends} />
 
         <View style={styles.detailSection}>
           <View style={styles.detailHeader}>
@@ -228,14 +239,18 @@ export default function CalendarScreen() {
   );
 }
 
-function LegendSection() {
+interface LegendSectionProps {
+  legends: LegendItem[];
+}
+
+function LegendSection({ legends }: LegendSectionProps) {
   const { t } = useTranslation();
 
   return (
     <View style={styles.legendSection}>
       <Text style={styles.legendTitle}>{t('calendar.legendTitle')}</Text>
       <View style={styles.legendGrid}>
-        {LEGEND_ITEMS.map((item) => (
+        {legends.map((item) => (
           <View key={item.labelKey} style={styles.legendItem}>
             <View style={[styles.legendDot, { backgroundColor: item.color }]} />
             <Text style={styles.legendLabel}>{t(item.labelKey)}</Text>
