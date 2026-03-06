@@ -36,6 +36,48 @@ export const idTranslation = {
     emailBody: 'Assalamu\'alaikum, saya ingin memberikan saran untuk aplikasi Puasa Sunnah:\n\n',
     emailErrorTitle: 'Email Tidak Tersedia',
     emailErrorMessage: 'Aplikasi email tidak ditemukan di perangkat ini.',
+    sectionLegal: 'Legal',
+    privacyDescription: 'Baca kebijakan privasi aplikasi untuk memahami bagaimana data ditangani.',
+    privacyButton: 'Buka Privacy Policy',
+  },
+  privacy: {
+    title: 'Privacy Policy',
+    back: 'Kembali',
+    lastUpdated: 'Terakhir diperbarui: 6 Maret 2026',
+    sections: {
+      introduction: {
+        title: 'Pendahuluan',
+        body: 'Puasa Sunnah dirancang untuk membantu pengguna melihat jadwal puasa sunnah dan informasi pendukungnya. Kami menghormati privasi Anda dan berkomitmen menjelaskan data apa yang digunakan di aplikasi ini.',
+      },
+      dataCollection: {
+        title: 'Data yang Dikumpulkan',
+        body: 'Aplikasi ini pada dasarnya tidak meminta data pribadi sensitif seperti nama, alamat, atau nomor identitas. Penggunaan bahasa aplikasi disimpan secara lokal di perangkat agar preferensi Anda tetap konsisten saat aplikasi dibuka kembali.',
+      },
+      dataUsage: {
+        title: 'Penggunaan Data',
+        body: 'Data lokal tersebut hanya digunakan untuk menjalankan fitur aplikasi, seperti menampilkan konten dalam bahasa Indonesia atau English dan menjaga pengalaman penggunaan tetap sesuai preferensi Anda.',
+      },
+      dataStorage: {
+        title: 'Penyimpanan Data',
+        body: 'Preferensi yang diperlukan aplikasi dapat disimpan secara lokal pada perangkat Anda. Kami tidak mengklaim menyimpan data tersebut pada server milik kami selama Anda hanya menggunakan fitur standar aplikasi ini.',
+      },
+      thirdParty: {
+        title: 'Layanan Pihak Ketiga',
+        body: 'Aplikasi ini dapat menggunakan layanan atau pustaka pihak ketiga dari platform yang digunakan untuk menjalankan aplikasi, seperti Expo atau React Native. Kebijakan privasi layanan pihak ketiga tersebut mengikuti ketentuan masing-masing penyedia.',
+      },
+      children: {
+        title: 'Privasi Anak',
+        body: 'Konten aplikasi bersifat umum dan tidak secara khusus menargetkan anak-anak untuk mengumpulkan data pribadi. Jika Anda merasa ada informasi yang seharusnya tidak tersimpan, silakan hubungi developer.',
+      },
+      changes: {
+        title: 'Perubahan Kebijakan',
+        body: 'Privacy Policy ini dapat diperbarui sewaktu-waktu untuk menyesuaikan perubahan fitur atau kebutuhan hukum. Versi terbaru akan ditampilkan di halaman ini bersama tanggal pembaruan terakhir.',
+      },
+      contact: {
+        title: 'Kontak',
+        body: 'Jika Anda memiliki pertanyaan terkait privasi atau penggunaan data, silakan hubungi developer melalui email: arashy.sc@gmail.com.',
+      },
+    },
   },
   detail: {
     notFound: 'Data puasa tidak ditemukan.',

@@ -19,9 +19,10 @@ const DEVELOPER_EMAIL = 'arashy.sc@gmail.com';
 
 interface AboutScreenProps {
   onBack: () => void;
+  onOpenPrivacyPolicy: () => void;
 }
 
-export default function AboutScreen({ onBack }: AboutScreenProps) {
+export default function AboutScreen({ onBack, onOpenPrivacyPolicy }: AboutScreenProps) {
   const { t } = useTranslation();
   const insets = useSafeAreaInsets();
   const appVersion = Constants.expoConfig?.version ?? '1.0.0';
@@ -76,6 +77,18 @@ export default function AboutScreen({ onBack }: AboutScreenProps) {
             activeOpacity={0.85}
           >
             <Text style={styles.emailButtonText}>{t('about.sendSuggestionButton')}</Text>
+          </TouchableOpacity>
+        </View>
+
+        <View style={styles.card}>
+          <Text style={styles.sectionTitle}>{t('about.sectionLegal')}</Text>
+          <Text style={styles.description}>{t('about.privacyDescription')}</Text>
+          <TouchableOpacity
+            style={styles.secondaryButton}
+            onPress={onOpenPrivacyPolicy}
+            activeOpacity={0.85}
+          >
+            <Text style={styles.secondaryButtonText}>{t('about.privacyButton')}</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>
@@ -180,6 +193,20 @@ const styles = StyleSheet.create({
   },
   emailButtonText: {
     color: '#FFFFFF',
+    fontSize: 14,
+    fontWeight: '700',
+  },
+  secondaryButton: {
+    marginTop: 12,
+    backgroundColor: '#F0F7F1',
+    borderRadius: 10,
+    paddingVertical: 12,
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#D8EAD9',
+  },
+  secondaryButtonText: {
+    color: '#1B5E20',
     fontSize: 14,
     fontWeight: '700',
   },

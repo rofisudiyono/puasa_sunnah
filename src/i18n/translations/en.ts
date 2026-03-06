@@ -36,6 +36,48 @@ export const enTranslation = {
     emailBody: 'Assalamu\'alaikum, I would like to share a suggestion for the Puasa Sunnah app:\n\n',
     emailErrorTitle: 'Email Unavailable',
     emailErrorMessage: 'No email application was found on this device.',
+    sectionLegal: 'Legal',
+    privacyDescription: 'Read the app privacy policy to understand how data is handled.',
+    privacyButton: 'Open Privacy Policy',
+  },
+  privacy: {
+    title: 'Privacy Policy',
+    back: 'Back',
+    lastUpdated: 'Last updated: March 6, 2026',
+    sections: {
+      introduction: {
+        title: 'Introduction',
+        body: 'Puasa Sunnah is designed to help users view sunnah fasting schedules and related information. We respect your privacy and are committed to explaining what data is used in this app.',
+      },
+      dataCollection: {
+        title: 'Data We Collect',
+        body: 'This app generally does not request sensitive personal data such as your name, address, or identification number. The selected app language may be stored locally on your device so your preference remains consistent when you reopen the app.',
+      },
+      dataUsage: {
+        title: 'How Data Is Used',
+        body: 'That local data is only used to operate app features, such as showing content in Bahasa Indonesia or English and keeping the experience aligned with your preference.',
+      },
+      dataStorage: {
+        title: 'Data Storage',
+        body: 'The preferences needed by the app may be stored locally on your device. We do not claim to store that information on our own servers while you only use the standard features of this app.',
+      },
+      thirdParty: {
+        title: 'Third-Party Services',
+        body: 'The app may rely on third-party services or libraries from the platform used to run it, such as Expo or React Native. The privacy practices for those third-party services are governed by each provider.',
+      },
+      children: {
+        title: 'Children\'s Privacy',
+        body: 'The app content is general in nature and is not specifically designed to collect personal data from children. If you believe information should not be stored, please contact the developer.',
+      },
+      changes: {
+        title: 'Policy Changes',
+        body: 'This Privacy Policy may be updated from time to time to reflect feature changes or legal requirements. The latest version will be shown on this page together with the most recent update date.',
+      },
+      contact: {
+        title: 'Contact',
+        body: 'If you have questions about privacy or data usage, please contact the developer by email at arashy.sc@gmail.com.',
+      },
+    },
   },
   detail: {
     notFound: 'Fasting data was not found.',

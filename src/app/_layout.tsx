@@ -25,6 +25,12 @@ export default function TabLayout() {
             animation: 'slide_from_right',
           }}
         />
+        <Stack.Screen
+          name="privacy-policy"
+          options={{
+            animation: 'slide_from_right',
+          }}
+        />
       </Stack>
     </ThemeProvider>
   );

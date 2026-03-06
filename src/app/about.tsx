@@ -6,5 +6,10 @@ import AboutScreen from '@/screens/AboutScreen';
 export default function AboutRoute() {
   const router = useRouter();
 
-  return <AboutScreen onBack={() => router.back()} />;
+  return (
+    <AboutScreen
+      onBack={() => router.back()}
+      onOpenPrivacyPolicy={() => router.push('/privacy-policy')}
+    />
+  );
 }
