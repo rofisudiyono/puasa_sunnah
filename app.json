@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "Puasa Sunnah",
-    "slug": "puasa_sunnah",
+    "slug": "puasa-sunnah",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -41,6 +41,13 @@
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
-    }
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "6a90c88c-32e7-4a2b-b41a-57d6add3deb0"
+      }
+    },
+    "owner": "arashy"
   }
 }
