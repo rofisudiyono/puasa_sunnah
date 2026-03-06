@@ -3,12 +3,13 @@ export const idTranslation = {
     language: 'Bahasa',
   },
   calendar: {
-    title: 'Kalender Puasa Sunnah',
+    title: 'Kalender Puasa',
     empty: 'Tidak ada puasa sunnah hari ini',
-    availableFastings: '{{count}} Puasa Sunnah Tersedia',
+    availableFastings: '{{count}} Puasa Tersedia',
     aboutButton: 'Tentang',
     legendTitle: 'Keterangan Warna',
     legend: {
+      ramadhan: 'Ramadhan',
       seninKamis: 'Senin & Kamis',
       ayyamulBidh: 'Ayyamul Bidh',
       arafah: 'Arafah',
@@ -26,7 +27,7 @@ export const idTranslation = {
     back: 'Kembali',
     appName: 'Puasa Sunnah',
     versionLabel: 'Versi {{version}}',
-    description: 'Aplikasi ini membantu menandai dan mempelajari jadwal puasa sunnah sepanjang tahun Hijriah.',
+    description: 'Aplikasi ini membantu menandai dan mempelajari jadwal puasa sepanjang tahun Hijriah, termasuk puasa wajib dan puasa sunnah.',
     sectionApp: 'Tentang',
     sectionSuggestion: 'Saran Untuk Developer',
     suggestionDescription: 'Punya ide fitur, koreksi konten, atau masukan UX? Kirim saran langsung ke developer lewat email.',
@@ -82,10 +83,47 @@ export const idTranslation = {
   detail: {
     notFound: 'Data puasa tidak ditemukan.',
     back: 'Kembali',
+    monthlyInfoSection: '📌 Informasi Bulanan',
     virtueSection: '✨ Keutamaan & Fadilah',
     niatSection: '🤲 Niat Puasa',
     meaningLabel: 'Artinya:',
     shareButton: '🔗 Bagikan Info Puasa Ini',
     shareTitle: 'Fadilah',
+  },
+  puasa: {
+    ramadhan: {
+      nama: 'Puasa Ramadhan',
+      kategori: 'Wajib Tahunan',
+      deskripsiSingkat: 'Puasa wajib selama bulan Ramadhan dari terbit fajar hingga terbenam matahari',
+      niatArtinya: 'Saya niat berpuasa esok hari untuk menunaikan fardhu bulan Ramadhan karena Allah Ta\'ala',
+    },
+    syawal: {
+      nama: 'Puasa Syawal',
+      kategori: 'Bulanan Khusus',
+      deskripsiSingkat: 'Puasa 7 hari di bulan Syawal dan dapat dilakukan terpisah selama masih dalam bulan Syawal',
+      niatArtinya: "Saya niat puasa Syawal, sunnah karena Allah Ta'ala",
+      fadilah: {
+        0: {
+          judul: 'Keutamaan Puasa Syawal',
+          isi: 'Rasulullah ﷺ bersabda bahwa siapa yang berpuasa Ramadhan lalu mengikutinya dengan puasa Syawal akan mendapat pahala seperti berpuasa sepanjang tahun.',
+          sumber: 'HR. Muslim no. 1164',
+        },
+        1: {
+          judul: 'Penyempurna Ibadah Ramadhan',
+          isi: 'Para ulama menjelaskan bahwa puasa sunnah setelah Ramadhan memiliki nilai seperti amalan sunnah yang menyempurnakan kekurangan pada ibadah wajib.',
+          sumber: 'Syarh An-Nawawi \'ala Shahih Muslim',
+        },
+        2: {
+          judul: 'Boleh Dilakukan Terpisah',
+          isi: 'Mayoritas ulama membolehkan puasa Syawal dilakukan secara terpisah selama masih di bulan Syawal. Tidak disyaratkan berurutan, sehingga memudahkan muslim menyesuaikannya dengan kemampuan dan kesempatan.',
+          sumber: 'Penjelasan mayoritas fuqaha',
+        },
+      },
+      infoBulanan: {
+        0: 'Target puasa Syawal di aplikasi ini adalah 7 hari pada bulan Syawal.',
+        1: 'Pelaksanaannya tidak harus berurutan. Anda dapat memilih hari yang terpisah-pisah selama masih berada dalam bulan Syawal.',
+        2: 'Tanggal 1 Syawal tidak ditandai karena merupakan hari raya Idul Fitri. Penandaan dimulai sejak 2 Syawal sampai akhir bulan sebagai panduan memilih hari.',
+      },
+    },
   },
 } as const;

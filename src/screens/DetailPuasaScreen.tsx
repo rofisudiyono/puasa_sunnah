@@ -91,6 +91,20 @@ export default function DetailPuasaScreen({ puasa, onBack }: DetailPuasaScreenPr
           <Text style={styles.descText}>{localizedPuasa.deskripsiSingkat}</Text>
         </View>
 
+        {localizedPuasa.infoBulanan && localizedPuasa.infoBulanan.length > 0 ? (
+          <>
+            <SectionTitle title={t('detail.monthlyInfoSection')} color={localizedPuasa.color} />
+            <View style={styles.infoCard}>
+              {localizedPuasa.infoBulanan.map((item, index) => (
+                <View key={`${localizedPuasa.id}-info-${index}`} style={styles.infoRow}>
+                  <Text style={[styles.infoBullet, { color: localizedPuasa.color }]}>•</Text>
+                  <Text style={styles.infoText}>{item}</Text>
+                </View>
+              ))}
+            </View>
+          </>
+        ) : null}
+
         <SectionTitle title={t('detail.virtueSection')} color={localizedPuasa.color} />
 
         {localizedPuasa.fadilah.map((item, idx) => (
@@ -260,6 +274,34 @@ const styles = StyleSheet.create({
     lineHeight: 22,
     textAlign: 'center',
     fontStyle: 'italic',
+  },
+  infoCard: {
+    backgroundColor: '#fff',
+    borderRadius: 12,
+    padding: 16,
+    marginBottom: 20,
+    gap: 10,
+    elevation: 1,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 3,
+  },
+  infoRow: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    gap: 10,
+  },
+  infoBullet: {
+    fontSize: 18,
+    lineHeight: 20,
+    fontWeight: '700',
+  },
+  infoText: {
+    flex: 1,
+    fontSize: 13,
+    lineHeight: 20,
+    color: '#47545D',
   },
   sectionTitleRow: {
     flexDirection: 'row',

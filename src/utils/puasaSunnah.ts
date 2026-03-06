@@ -20,6 +20,7 @@ export interface PuasaItem {
   niat: string;
   niatLatin: string;
   niatArtinya: string;
+  infoBulanan?: string[];
 }
 
 export interface CalendarDot {
@@ -118,6 +119,41 @@ export const PUASA_DATA: Record<string, PuasaItem> = {
     niatArtinya: 'Saya niat puasa Ayyamul Bidh, sunnah karena Allah Ta\'ala',
   },
 
+  ramadhan: {
+    id: 'ramadhan',
+    nama: 'Puasa Ramadhan',
+    arabicName: 'صيام رمضان',
+    kategori: 'Wajib Tahunan',
+    color: '#16A34A',
+    dotColor: '#16A34A',
+    icon: '🕌',
+    deskripsiSingkat: 'Puasa wajib selama bulan Ramadhan dari terbit fajar hingga terbenam matahari',
+    fadilah: [
+      {
+        judul: 'Rukun Islam',
+        isi: 'Puasa Ramadhan adalah salah satu rukun Islam yang diwajibkan bagi setiap muslim yang baligh, berakal, mampu, dan tidak memiliki uzur syar\'i.',
+        sumber: 'QS. Al-Baqarah: 183, HR. Bukhari no. 8, Muslim no. 16',
+      },
+      {
+        judul: 'Bulan Diturunkannya Al-Qur\'an',
+        isi: 'Ramadhan adalah bulan yang dimuliakan karena di dalamnya Al-Qur\'an diturunkan sebagai petunjuk bagi manusia dan penjelas antara yang haq dan batil.',
+        sumber: 'QS. Al-Baqarah: 185',
+      },
+      {
+        judul: 'Pahala yang Sangat Besar',
+        isi: 'Allah menyatakan bahwa puasa dilakukan khusus karena-Nya, dan Allah sendiri yang akan memberikan balasannya. Puasa juga menjadi sebab ampunan bagi orang yang menjalaninya dengan iman dan mengharap pahala.',
+        sumber: 'HR. Bukhari no. 1904, Muslim no. 1151',
+      },
+    ],
+    niat: 'نَوَيْتُ صَوْمَ غَدٍ عَنْ أَدَاءِ فَرْضِ شَهْرِ رَمَضَانَ لِلَّهِ تَعَالَى',
+    niatLatin: 'Nawaitu shauma ghadin \'an adai fardhi syahri ramadhana lillahi ta\'ala',
+    niatArtinya: 'Saya niat berpuasa esok hari untuk menunaikan fardhu bulan Ramadhan karena Allah Ta\'ala',
+    infoBulanan: [
+      'Puasa Ramadhan berlangsung setiap hari selama bulan Ramadhan, kecuali bagi orang yang memiliki uzur syar\'i sesuai ketentuan agama.',
+      'Di aplikasi ini, seluruh hari dalam bulan Ramadhan ditandai sebagai puasa Ramadhan agar mudah dibedakan dari puasa sunnah di bulan lain.',
+    ],
+  },
+
   arafah: {
     id: 'arafah',
     nama: 'Puasa Arafah',
@@ -209,32 +245,37 @@ export const PUASA_DATA: Record<string, PuasaItem> = {
   syawal: {
     id: 'syawal',
     nama: 'Puasa Syawal',
-    arabicName: 'صيام ستة من شوال',
-    kategori: 'Tahunan',
+    arabicName: 'صيام شوال',
+    kategori: 'Bulanan Khusus',
     color: '#00BCD4',
     dotColor: '#00BCD4',
     icon: '🎉',
-    deskripsiSingkat: 'Puasa 6 hari di bulan Syawal setelah Idul Fitri',
+    deskripsiSingkat: 'Puasa 7 hari di bulan Syawal dan dapat dilakukan terpisah selama masih dalam bulan Syawal',
     fadilah: [
       {
-        judul: 'Seperti Puasa Setahun Penuh',
-        isi: 'Rasulullah ﷺ bersabda: "Barang siapa yang berpuasa Ramadan kemudian mengikutinya dengan enam hari di bulan Syawal, maka ia seperti berpuasa sepanjang tahun."',
+        judul: 'Keutamaan Puasa Syawal',
+        isi: 'Rasulullah ﷺ bersabda bahwa siapa yang berpuasa Ramadhan lalu mengikutinya dengan puasa Syawal akan mendapat pahala seperti berpuasa sepanjang tahun.',
         sumber: 'HR. Muslim no. 1164',
       },
       {
-        judul: 'Penyempurna Puasa Ramadan',
-        isi: 'Para ulama menjelaskan bahwa puasa Syawal berfungsi seperti shalat sunnah rawatib — menutupi kekurangan dan menyempurnakan ibadah wajib yang mungkin ada kekurangannya.',
-        sumber: 'Syarh Nawawi atas Muslim',
+        judul: 'Penyempurna Ibadah Ramadhan',
+        isi: 'Para ulama menjelaskan bahwa puasa sunnah setelah Ramadhan memiliki nilai seperti amalan sunnah yang menyempurnakan kekurangan pada ibadah wajib.',
+        sumber: 'Syarh An-Nawawi \'ala Shahih Muslim',
       },
       {
-        judul: 'Boleh Tidak Berurutan',
-        isi: 'Mayoritas ulama berpendapat bahwa keenam hari puasa Syawal boleh dilakukan secara berurutan maupun terpisah, yang penting masih dalam bulan Syawal.',
-        sumber: 'Fatwa Syaikh Ibn Utsaimin',
+        judul: 'Boleh Dilakukan Terpisah',
+        isi: 'Mayoritas ulama membolehkan puasa Syawal dilakukan secara terpisah selama masih di bulan Syawal. Tidak disyaratkan berurutan, sehingga memudahkan muslim menyesuaikannya dengan kemampuan dan kesempatan.',
+        sumber: 'Penjelasan mayoritas fuqaha',
       },
     ],
     niat: 'نَوَيْتُ صَوْمَ شَوَّالٍ سُنَّةً لِلَّهِ تَعَالَى',
     niatLatin: 'Nawaitu shauma syawwalin sunnatan lillahi ta\'ala',
     niatArtinya: "Saya niat puasa Syawal, sunnah karena Allah Ta'ala",
+    infoBulanan: [
+      'Target puasa Syawal di aplikasi ini adalah 7 hari pada bulan Syawal.',
+      'Pelaksanaannya tidak harus berurutan. Anda dapat memilih hari yang terpisah-pisah selama masih berada dalam bulan Syawal.',
+      'Tanggal 1 Syawal tidak ditandai karena merupakan hari raya Idul Fitri. Penandaan dimulai sejak 2 Syawal sampai akhir bulan sebagai panduan memilih hari.',
+    ],
   },
 
   rajab: {
@@ -367,6 +408,11 @@ export function getPuasaOnDate(dateString: string): PuasaItem[] {
   const hijriMonth = m.iMonth() + 1; // 1-12
 
   const hasil: PuasaItem[] = [];
+
+  if (hijriMonth === 9) {
+    hasil.push(PUASA_DATA.ramadhan);
+    return hasil;
+  }
 
   // ── Mingguan ──────────────────────
   if (dayOfWeek === 1 || dayOfWeek === 4) {

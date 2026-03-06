@@ -3,12 +3,13 @@ export const enTranslation = {
     language: 'Language',
   },
   calendar: {
-    title: 'Sunnah Fasting Calendar',
+    title: 'Fasting Calendar',
     empty: 'No sunnah fasting scheduled today',
-    availableFastings: '{{count}} Sunnah Fasts Available',
+    availableFastings: '{{count}} Fasts Available',
     aboutButton: 'About',
     legendTitle: 'Color Legend',
     legend: {
+      ramadhan: 'Ramadan',
       seninKamis: 'Monday & Thursday',
       ayyamulBidh: 'Ayyamul Bidh',
       arafah: 'Arafah',
@@ -26,7 +27,7 @@ export const enTranslation = {
     back: 'Back',
     appName: 'Puasa Sunnah',
     versionLabel: 'Version {{version}}',
-    description: 'This app helps you track and learn sunnah fasting schedules across the Hijri year.',
+    description: 'This app helps you track and learn fasting schedules across the Hijri year, including obligatory and sunnah fasting.',
     sectionApp: 'About',
     sectionSuggestion: 'Suggestions For Developer',
     suggestionDescription: 'Have feature ideas, content corrections, or UX feedback? Send your suggestion directly by email.',
@@ -82,6 +83,7 @@ export const enTranslation = {
   detail: {
     notFound: 'Fasting data was not found.',
     back: 'Back',
+    monthlyInfoSection: '📌 Monthly Information',
     virtueSection: '✨ Virtues & Benefits',
     niatSection: '🤲 Fasting Intention',
     meaningLabel: 'Meaning:',
@@ -89,6 +91,12 @@ export const enTranslation = {
     shareTitle: 'Virtues',
   },
   puasa: {
+    ramadhan: {
+      nama: 'Ramadan Fasting',
+      kategori: 'Annual Obligation',
+      deskripsiSingkat: 'Obligatory fasting throughout Ramadan from dawn until sunset',
+      niatArtinya: "I intend to fast tomorrow to fulfill the obligatory fast of Ramadan for Allah Ta'ala",
+    },
     senin_kamis: {
       nama: 'Monday & Thursday Fasting',
       kategori: 'Weekly',
@@ -121,9 +129,31 @@ export const enTranslation = {
     },
     syawal: {
       nama: 'Shawwal Fasting',
-      kategori: 'Annual',
-      deskripsiSingkat: 'Six days of fasting in Shawwal after Eid al-Fitr',
+      kategori: 'Special Month',
+      deskripsiSingkat: 'Seven fasting days in Shawwal that may be done separately throughout the month',
       niatArtinya: "I intend to fast in Shawwal as a sunnah for Allah Ta'ala",
+      fadilah: {
+        0: {
+          judul: 'Virtue of Shawwal Fasting',
+          isi: 'The Prophet ﷺ said that whoever fasts Ramadan and then follows it with fasting in Shawwal will receive a reward like fasting for an entire year.',
+          sumber: 'Sahih Muslim no. 1164',
+        },
+        1: {
+          judul: 'Completing Ramadan Worship',
+          isi: 'Scholars explain that voluntary fasting after Ramadan carries a role similar to sunnah acts that complete shortcomings in obligatory worship.',
+          sumber: 'Sharh An-Nawawi on Sahih Muslim',
+        },
+        2: {
+          judul: 'May Be Done Separately',
+          isi: 'The majority of scholars allow Shawwal fasting to be done on separate days as long as it remains within the month of Shawwal. It does not have to be consecutive.',
+          sumber: 'Explanation of the majority of jurists',
+        },
+      },
+      infoBulanan: {
+        0: 'In this app, the Shawwal fasting target is 7 days during the month of Shawwal.',
+        1: 'It does not need to be consecutive. You may choose separate days as long as they remain within Shawwal.',
+        2: '1 Shawwal is not marked because it is Eid al-Fitr. Marking starts from 2 Shawwal until the end of the month as a planning guide.',
+      },
     },
     rajab: {
       nama: 'Rajab Fasting',

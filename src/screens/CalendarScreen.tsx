@@ -75,6 +75,7 @@ interface LegendItem {
 }
 
 const LEGEND_ITEMS: LegendItem[] = [
+  { id: 'ramadhan', color: '#16A34A', labelKey: 'calendar.legend.ramadhan' },
   { id: 'senin_kamis', color: '#4CAF50', labelKey: 'calendar.legend.seninKamis' },
   { id: 'ayyamul_bidh', color: '#2196F3', labelKey: 'calendar.legend.ayyamulBidh' },
   { id: 'arafah', color: '#FF9800', labelKey: 'calendar.legend.arafah' },
