@@ -1,4 +1,5 @@
 import Constants from 'expo-constants';
+import * as Updates from 'expo-updates';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import {
@@ -29,6 +30,21 @@ export default function AboutScreen({
   const { t } = useTranslation();
   const insets = useSafeAreaInsets();
   const appVersion = Constants.expoConfig?.version ?? '1.0.0';
+  const otaPatchId = Updates.updateId ? Updates.updateId.slice(0, 8) : null;
+  const otaChannel = Updates.channel ?? 'default';
+  const otaCreatedAt = Updates.createdAt
+    ? new Intl.DateTimeFormat(undefined, {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+      }).format(Updates.createdAt)
+    : null;
+  const otaPatchValue = otaPatchId
+    ? t('about.otaVersionValue', {
+        channel: otaChannel,
+        patchId: otaPatchId,
+      })
+    : t('about.otaVersionEmbedded');
 
   const handleSendSuggestion = async () => {
     const mailtoUrl = `mailto:${DEVELOPER_EMAIL}?subject=${encodeURIComponent(t('about.emailSubject'))}&body=${encodeURIComponent(t('about.emailBody'))}`;
@@ -63,6 +79,10 @@ export default function AboutScreen({
           <Text style={styles.sectionTitle}>{t('about.sectionApp')}</Text>
           <Text style={styles.appName}>{t('about.appName')}</Text>
           <Text style={styles.version}>{t('about.versionLabel', { version: appVersion })}</Text>
+          <Text style={styles.version}>{t('about.otaVersionLabel', { version: otaPatchValue })}</Text>
+          {otaCreatedAt ? (
+            <Text style={styles.version}>{t('about.otaBuildDateLabel', { date: otaCreatedAt })}</Text>
+          ) : null}
           <Text style={styles.description}>{t('about.description')}</Text>
         </View>
 

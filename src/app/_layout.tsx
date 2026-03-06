@@ -1,17 +1,45 @@
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { Stack } from 'expo-router';
 import React, { useEffect } from 'react';
-import { useColorScheme } from 'react-native';
+import { Alert, Platform, useColorScheme } from 'react-native';
 
 import { AnimatedSplashOverlay } from '@/components/animated-icon';
 import i18n, { normalizeLanguage } from '@/i18n';
+import { getAvailableStoreUpdate, getUpdateAlertCopy, openStoreForUpdate } from '@/utils/appUpdate';
 import { syncFastingNotifications } from '@/utils/fastingNotifications';
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
 
   useEffect(() => {
-    syncFastingNotifications(normalizeLanguage(i18n.resolvedLanguage ?? i18n.language));
+    const language = normalizeLanguage(i18n.resolvedLanguage ?? i18n.language);
+
+    syncFastingNotifications(language);
+
+    if (Platform.OS === 'web') {
+      return;
+    }
+
+    getAvailableStoreUpdate().then((updateInfo) => {
+      if (!updateInfo) {
+        return;
+      }
+
+      const copy = getUpdateAlertCopy(language, updateInfo.latestVersion);
+
+      Alert.alert(copy.title, copy.message, [
+        {
+          text: copy.later,
+          style: 'cancel',
+        },
+        {
+          text: copy.update,
+          onPress: () => {
+            openStoreForUpdate(updateInfo.storeUrl);
+          },
+        },
+      ]);
+    });
   }, []);
 
   return (
