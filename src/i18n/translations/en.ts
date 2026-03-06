@@ -8,6 +8,12 @@ export const enTranslation = {
     availableFastings: '{{count}} Fasts Available',
     aboutButton: 'About',
     legendTitle: 'Color Legend',
+    compactLabel: '2-week view',
+    fullMonthLabel: 'Full month view',
+    showAllMonth: 'Show All Month',
+    showTwoWeeks: 'Collapse to 2 Weeks',
+    prevTwoWeeks: 'Previous 2 Weeks',
+    nextTwoWeeks: 'Next 2 Weeks',
     legend: {
       ramadhan: 'Ramadan',
       seninKamis: 'Monday & Thursday',

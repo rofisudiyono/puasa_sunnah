@@ -74,6 +74,18 @@ interface LegendItem {
   labelKey: string;
 }
 
+interface CompactCalendarProps {
+  language: 'id' | 'en';
+  selectedDate: string;
+  startDate: string;
+  onDayPress: (date: CalendarDateCell) => void;
+  onPrevious: () => void;
+  onNext: () => void;
+  onExpand: () => void;
+  markedDates: Record<string, CalendarMarking>;
+  t: (key: string) => string;
+}
+
 const LEGEND_ITEMS: LegendItem[] = [
   { id: 'ramadhan', color: '#16A34A', labelKey: 'calendar.legend.ramadhan' },
   { id: 'senin_kamis', color: '#4CAF50', labelKey: 'calendar.legend.seninKamis' },
@@ -88,6 +100,119 @@ const LEGEND_ITEMS: LegendItem[] = [
   { id: 'rajab', color: '#E91E63', labelKey: 'calendar.legend.rajab' },
 ];
 
+function getCompactRangeStart(dateString: string) {
+  return moment(dateString).day(0).format('YYYY-MM-DD');
+}
+
+function createDateCell(dateString: string): CalendarDateCell {
+  const date = moment(dateString);
+  return {
+    dateString,
+    day: date.date(),
+    month: date.month() + 1,
+    year: date.year(),
+  };
+}
+
+function buildMarkedDatesForRange(dateStrings: string[], selectedDate: string) {
+  const marks: Record<string, CalendarMarking> = {};
+
+  dateStrings.forEach((dateString) => {
+    const puasaList = getPuasaOnDate(dateString);
+    const seen = new Set<string>();
+    const dots = puasaList
+      .filter((p) => {
+        if (seen.has(p.id)) return false;
+        seen.add(p.id);
+        return true;
+      })
+      .slice(0, 3)
+      .map((p) => ({ key: p.id, color: p.dotColor }));
+
+    if (dots.length > 0 || dateString === selectedDate) {
+      marks[dateString] = {
+        dots,
+        marked: true,
+        ...(dateString === selectedDate ? { selected: true, selectedColor: 'transparent' } : {}),
+      };
+    }
+  });
+
+  return marks;
+}
+
+function CompactCalendar({
+  language,
+  selectedDate,
+  startDate,
+  onDayPress,
+  onPrevious,
+  onNext,
+  onExpand,
+  markedDates,
+  t,
+}: CompactCalendarProps) {
+  const start = moment(startDate);
+  const days = Array.from({ length: 14 }, (_, index) => {
+    const value = start.clone().add(index, 'day');
+    return createDateCell(value.format('YYYY-MM-DD'));
+  });
+  const weeks = [days.slice(0, 7), days.slice(7, 14)];
+  const end = start.clone().add(13, 'day');
+  const sameMonth = start.month() === end.month() && start.year() === end.year();
+  const title = sameMonth
+    ? start.locale(language).format('MMMM YYYY')
+    : `${start.locale(language).format('D MMM')} - ${end.locale(language).format('D MMM YYYY')}`;
+  const weekdayLabels = (LocaleConfig.locales[language].dayNamesShort as string[]).map((label) => label.toUpperCase());
+
+  return (
+    <View style={styles.compactCalendar}>
+      <View style={styles.compactHeader}>
+        <View>
+          <Text style={styles.compactTitle}>{title}</Text>
+          <Text style={styles.compactSubtitle}>{t('calendar.compactLabel')}</Text>
+        </View>
+        <TouchableOpacity style={styles.compactToggleButton} onPress={onExpand} activeOpacity={0.8}>
+          <Text style={styles.compactToggleText}>{t('calendar.showAllMonth')}</Text>
+        </TouchableOpacity>
+      </View>
+
+      <View style={styles.compactNavRow}>
+        <TouchableOpacity style={styles.compactNavButton} onPress={onPrevious} activeOpacity={0.8}>
+          <Text style={styles.compactNavText}>‹ {t('calendar.prevTwoWeeks')}</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.compactNavButton} onPress={onNext} activeOpacity={0.8}>
+          <Text style={styles.compactNavText}>{t('calendar.nextTwoWeeks')} ›</Text>
+        </TouchableOpacity>
+      </View>
+
+      <View style={styles.compactWeekdayRow}>
+        {weekdayLabels.map((label: string) => (
+          <Text key={label} style={styles.compactWeekdayLabel}>
+            {label}
+          </Text>
+        ))}
+      </View>
+
+      {weeks.map((week, index) => (
+        <View key={`compact-week-${index}`} style={styles.compactWeekRow}>
+          {week.map((date) => (
+            <View key={date.dateString} style={styles.compactDayCell}>
+              <HijriDayComponent
+                date={date}
+                state={date.dateString === moment().format('YYYY-MM-DD') ? 'today' : undefined}
+                marking={markedDates[date.dateString]}
+                language={language}
+                onPress={onDayPress}
+              />
+            </View>
+          ))}
+        </View>
+      ))}
+    </View>
+  );
+}
+
 export default function CalendarScreen() {
   const router = useRouter();
   const { t, i18n } = useTranslation();
@@ -97,6 +222,8 @@ export default function CalendarScreen() {
 
   const [selectedDate, setSelectedDate] = useState(today);
   const [markedDates, setMarkedDates] = useState<Record<string, CalendarMarking>>({});
+  const [isCompactCalendar, setIsCompactCalendar] = useState(true);
+  const [compactStartDate, setCompactStartDate] = useState(getCompactRangeStart(today));
   const [currentMonth, setCurrentMonth] = useState({
     year: moment().year(),
     month: moment().month() + 1,
@@ -126,6 +253,10 @@ export default function CalendarScreen() {
 
   const handleDayPress = (date: CalendarDateCell) => {
     setSelectedDate(date.dateString);
+    setCurrentMonth({
+      year: moment(date.dateString).year(),
+      month: moment(date.dateString).month() + 1,
+    });
   };
 
   const handleMonthChange = (month: CalendarMonth) => {
@@ -136,17 +267,51 @@ export default function CalendarScreen() {
     () => getPuasaOnDate(selectedDate).map((item) => translatePuasaItem(t, item)),
     [selectedDate, t],
   );
+  const compactMarkedDates = useMemo(() => {
+    const rangeDateStrings = Array.from({ length: 14 }, (_, index) => (
+      moment(compactStartDate).add(index, 'day').format('YYYY-MM-DD')
+    ));
+
+    return buildMarkedDatesForRange(rangeDateStrings, selectedDate);
+  }, [compactStartDate, selectedDate]);
+  const visibleMarkedDates = isCompactCalendar ? compactMarkedDates : markedDates;
   const visibleLegends = useMemo(() => {
     const activeLegendIds = new Set<string>();
-    Object.values(markedDates).forEach((dateMarking) => {
+    Object.values(visibleMarkedDates).forEach((dateMarking) => {
       dateMarking.dots.forEach((dot) => activeLegendIds.add(dot.key));
     });
 
     return LEGEND_ITEMS.filter((item) => activeLegendIds.has(item.id));
-  }, [markedDates]);
+  }, [visibleMarkedDates]);
 
   const hijri = getHijriInfo(selectedDate, language);
   const formattedDate = moment(selectedDate).locale(language).format('dddd, D MMMM YYYY');
+
+  const handleToggleCalendarMode = () => {
+    if (isCompactCalendar) {
+      setCurrentMonth({
+        year: moment(selectedDate).year(),
+        month: moment(selectedDate).month() + 1,
+      });
+      setIsCompactCalendar(false);
+      return;
+    }
+
+    setCompactStartDate(getCompactRangeStart(selectedDate));
+    setIsCompactCalendar(true);
+  };
+
+  const handleCompactShift = (direction: -1 | 1) => {
+    const nextStart = moment(compactStartDate).add(direction * 14, 'day');
+    const nextSelectedDate = nextStart.format('YYYY-MM-DD');
+
+    setCompactStartDate(nextSelectedDate);
+    setSelectedDate(nextSelectedDate);
+    setCurrentMonth({
+      year: nextStart.year(),
+      month: nextStart.month() + 1,
+    });
+  };
 
   return (
     <View style={styles.root}>
@@ -171,31 +336,59 @@ export default function CalendarScreen() {
 
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.calendarWrapper}>
-          <Calendar
-            current={today}
-            markingType="multi-dot"
-            markedDates={markedDates}
-            onDayPress={handleDayPress}
-            onMonthChange={handleMonthChange}
-            dayComponent={(props: any) => (
-              <HijriDayComponent
-                {...props}
-                language={language}
-                onPress={handleDayPress}
+          {isCompactCalendar ? (
+            <CompactCalendar
+              language={language}
+              selectedDate={selectedDate}
+              startDate={compactStartDate}
+              onDayPress={handleDayPress}
+              onPrevious={() => handleCompactShift(-1)}
+              onNext={() => handleCompactShift(1)}
+              onExpand={handleToggleCalendarMode}
+              markedDates={compactMarkedDates}
+              t={t}
+            />
+          ) : (
+            <>
+              <View style={styles.fullMonthHeader}>
+                <Text style={styles.fullMonthTitle}>{t('calendar.fullMonthLabel')}</Text>
+                <TouchableOpacity
+                  style={styles.fullMonthToggle}
+                  onPress={handleToggleCalendarMode}
+                  activeOpacity={0.8}
+                >
+                  <Text style={styles.fullMonthToggleText}>{t('calendar.showTwoWeeks')}</Text>
+                </TouchableOpacity>
+              </View>
+
+              <Calendar
+                key={`${currentMonth.year}-${currentMonth.month}`}
+                current={`${currentMonth.year}-${String(currentMonth.month).padStart(2, '0')}-01`}
+                markingType="multi-dot"
+                markedDates={markedDates}
+                onDayPress={handleDayPress}
+                onMonthChange={handleMonthChange}
+                dayComponent={(props: any) => (
+                  <HijriDayComponent
+                    {...props}
+                    language={language}
+                    onPress={handleDayPress}
+                  />
+                )}
+                theme={{
+                  backgroundColor: '#fff',
+                  calendarBackground: '#fff',
+                  textSectionTitleColor: '#4CAF50',
+                  monthTextColor: '#1B5E20',
+                  textMonthFontWeight: '700',
+                  textMonthFontSize: 16,
+                  arrowColor: '#4CAF50',
+                  textDayHeaderFontSize: 11,
+                  textDayHeaderFontWeight: '600',
+                }}
               />
-            )}
-            theme={{
-              backgroundColor: '#fff',
-              calendarBackground: '#fff',
-              textSectionTitleColor: '#4CAF50',
-              monthTextColor: '#1B5E20',
-              textMonthFontWeight: '700',
-              textMonthFontSize: 16,
-              arrowColor: '#4CAF50',
-              textDayHeaderFontSize: 11,
-              textDayHeaderFontWeight: '600',
-            }}
-          />
+            </>
+          )}
         </View>
 
         <LegendSection legends={visibleLegends} />
@@ -331,6 +524,105 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.08,
     shadowRadius: 4,
+  },
+  compactCalendar: {
+    padding: 16,
+    gap: 14,
+  },
+  compactHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+    gap: 12,
+  },
+  compactTitle: {
+    color: '#173F27',
+    fontSize: 20,
+    fontWeight: '800',
+    textTransform: 'capitalize',
+  },
+  compactSubtitle: {
+    color: '#6C767D',
+    fontSize: 13,
+    marginTop: 3,
+  },
+  compactToggleButton: {
+    backgroundColor: '#1B5E20',
+    paddingHorizontal: 12,
+    paddingVertical: 9,
+    borderRadius: 10,
+  },
+  compactToggleText: {
+    color: '#FFFFFF',
+    fontSize: 13,
+    fontWeight: '700',
+  },
+  compactNavRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    gap: 10,
+  },
+  compactNavButton: {
+    flex: 1,
+    backgroundColor: '#F0F7F1',
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: '#D8EAD9',
+    paddingVertical: 10,
+    alignItems: 'center',
+  },
+  compactNavText: {
+    color: '#1B5E20',
+    fontSize: 13,
+    fontWeight: '700',
+  },
+  compactWeekdayRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingHorizontal: 2,
+  },
+  compactWeekdayLabel: {
+    flex: 1,
+    textAlign: 'center',
+    color: '#7D848A',
+    fontSize: 11,
+    fontWeight: '700',
+  },
+  compactWeekRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  compactDayCell: {
+    flex: 1,
+    alignItems: 'center',
+    paddingVertical: 4,
+  },
+  fullMonthHeader: {
+    paddingHorizontal: 16,
+    paddingTop: 16,
+    paddingBottom: 8,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    gap: 12,
+  },
+  fullMonthTitle: {
+    color: '#173F27',
+    fontSize: 16,
+    fontWeight: '800',
+  },
+  fullMonthToggle: {
+    backgroundColor: '#F0F7F1',
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: '#D8EAD9',
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+  },
+  fullMonthToggleText: {
+    color: '#1B5E20',
+    fontSize: 13,
+    fontWeight: '700',
   },
   legendSection: {
     backgroundColor: '#fff',

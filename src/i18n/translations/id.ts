@@ -8,6 +8,12 @@ export const idTranslation = {
     availableFastings: '{{count}} Puasa Tersedia',
     aboutButton: 'Tentang',
     legendTitle: 'Keterangan Warna',
+    compactLabel: 'Tampilan 2 minggu',
+    fullMonthLabel: 'Tampilan 1 bulan',
+    showAllMonth: 'Lihat 1 Bulan',
+    showTwoWeeks: 'Ringkas 2 Minggu',
+    prevTwoWeeks: '2 Minggu Sebelumnya',
+    nextTwoWeeks: '2 Minggu Berikutnya',
     legend: {
       ramadhan: 'Ramadhan',
       seninKamis: 'Senin & Kamis',
