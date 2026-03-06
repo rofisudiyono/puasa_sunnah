@@ -323,11 +323,18 @@ export default function CalendarScreen() {
           <View style={styles.headerActions}>
             <LanguageSwitcher compact />
             <TouchableOpacity
-              style={styles.aboutButton}
+              style={styles.headerIconButton}
+              onPress={() => router.push('/notification-settings')}
+              activeOpacity={0.8}
+            >
+              <Text style={styles.headerIconText}>🔔</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.headerIconButton}
               onPress={() => router.push('/about')}
               activeOpacity={0.8}
             >
-              <Text style={styles.aboutButtonText}>i</Text>
+              <Text style={styles.headerIconText}>i</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -487,7 +494,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 10,
   },
-  aboutButton: {
+  headerIconButton: {
     backgroundColor: 'rgba(255,255,255,0.2)',
     borderWidth: 1,
     borderColor: 'rgba(255,255,255,0.4)',
@@ -497,7 +504,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  aboutButtonText: {
+  headerIconText: {
     color: '#FFFFFF',
     fontSize: 16,
     fontWeight: '800',

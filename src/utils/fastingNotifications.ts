@@ -1,4 +1,3 @@
-import * as Device from 'expo-device';
 import * as Notifications from 'expo-notifications';
 import moment from 'moment-hijri';
 import { Platform } from 'react-native';
@@ -30,6 +29,14 @@ function isNativeNotificationsSupported() {
   return Platform.OS === 'android' || Platform.OS === 'ios';
 }
 
+function hasEffectiveNotificationPermission(permissions: Notifications.NotificationPermissionsStatus) {
+  return (
+    permissions.granted
+    || permissions.ios?.status === Notifications.IosAuthorizationStatus.PROVISIONAL
+    || permissions.ios?.status === Notifications.IosAuthorizationStatus.AUTHORIZED
+  );
+}
+
 export async function configureNotificationChannel() {
   if (Platform.OS !== 'android') {
     return;
@@ -49,21 +56,25 @@ export async function getNotificationPermissionStatus() {
   }
 
   const permissions = await Notifications.getPermissionsAsync();
+  if (hasEffectiveNotificationPermission(permissions)) {
+    return 'granted' as const;
+  }
+
   return permissions.status;
 }
 
 export async function requestNotificationPermission() {
-  if (!isNativeNotificationsSupported() || !Device.isDevice) {
+  if (!isNativeNotificationsSupported()) {
     return false;
   }
 
   const current = await Notifications.getPermissionsAsync();
-  if (current.granted || current.ios?.status === Notifications.IosAuthorizationStatus.PROVISIONAL) {
+  if (hasEffectiveNotificationPermission(current)) {
     return true;
   }
 
   const requested = await Notifications.requestPermissionsAsync();
-  return requested.granted || requested.ios?.status === Notifications.IosAuthorizationStatus.PROVISIONAL;
+  return hasEffectiveNotificationPermission(requested);
 }
 
 function getEnabledItemsForDate(dateString: string, enabledTypes: Record<FastingNotificationType, boolean>) {
@@ -128,7 +139,7 @@ export async function syncFastingNotifications(language: AppLanguage, options?: 
 
   const permissionGranted = options?.requestPermission
     ? await requestNotificationPermission()
-    : (await Notifications.getPermissionsAsync()).granted;
+    : hasEffectiveNotificationPermission(await Notifications.getPermissionsAsync());
 
   if (!permissionGranted) {
     return;

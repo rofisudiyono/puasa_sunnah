@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
+  AppState,
   Alert,
+  Linking,
   ScrollView,
   StatusBar,
   StyleSheet,
@@ -15,6 +17,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
 import { normalizeLanguage } from '@/i18n';
 import {
+  getNotificationPermissionStatus,
   getSelectableFastingTypes,
   requestNotificationPermission,
   scheduleTestFastingNotification,
@@ -38,14 +41,55 @@ export default function NotificationSettingsScreen({ onBack }: NotificationSetti
   const language = normalizeLanguage(i18n.resolvedLanguage ?? i18n.language);
   const [settings, setSettings] = useState<NotificationSettings | null>(null);
   const [isSaving, setIsSaving] = useState(false);
+  const [permissionStatus, setPermissionStatus] = useState<string>('undetermined');
 
   useEffect(() => {
     getNotificationSettings().then(setSettings);
+    getNotificationPermissionStatus().then((status) => setPermissionStatus(String(status)));
+  }, []);
+
+  useEffect(() => {
+    const subscription = AppState.addEventListener('change', (nextState) => {
+      if (nextState === 'active') {
+        getNotificationPermissionStatus().then((status) => setPermissionStatus(String(status)));
+      }
+    });
+
+    return () => {
+      subscription.remove();
+    };
   }, []);
 
   if (!settings) {
     return null;
   }
+
+  const refreshPermissionStatus = async () => {
+    const status = await getNotificationPermissionStatus();
+    setPermissionStatus(String(status));
+    return status;
+  };
+
+  const openSystemSettings = async () => {
+    await Linking.openSettings();
+  };
+
+  const showPermissionAlert = () => {
+    Alert.alert(
+      t('notifications.permissionTitle'),
+      t('notifications.permissionMessage'),
+      [
+        {
+          text: t('notifications.openSettingsButton'),
+          onPress: openSystemSettings,
+        },
+        {
+          text: t('notifications.cancelButton'),
+          style: 'cancel',
+        },
+      ],
+    );
+  };
 
   const handleToggleGlobal = async (value: boolean) => {
     if (isSaving) {
@@ -57,8 +101,9 @@ export default function NotificationSettingsScreen({ onBack }: NotificationSetti
     try {
       if (value) {
         const granted = await requestNotificationPermission();
+        await refreshPermissionStatus();
         if (!granted) {
-          Alert.alert(t('notifications.permissionTitle'), t('notifications.permissionMessage'));
+          showPermissionAlert();
           setIsSaving(false);
           return;
         }
@@ -68,6 +113,7 @@ export default function NotificationSettingsScreen({ onBack }: NotificationSetti
       setSettings(nextSettings);
       await saveNotificationSettings(nextSettings);
       await syncFastingNotifications(language);
+      await refreshPermissionStatus();
     } finally {
       setIsSaving(false);
     }
@@ -93,6 +139,7 @@ export default function NotificationSettingsScreen({ onBack }: NotificationSetti
       await saveNotificationSettings(nextSettings);
       if (nextSettings.enabled) {
         await syncFastingNotifications(language);
+        await refreshPermissionStatus();
       }
     } finally {
       setIsSaving(false);
@@ -108,13 +155,36 @@ export default function NotificationSettingsScreen({ onBack }: NotificationSetti
 
     try {
       const scheduled = await scheduleTestFastingNotification(language);
+      await refreshPermissionStatus();
 
       if (!scheduled) {
-        Alert.alert(t('notifications.permissionTitle'), t('notifications.permissionMessage'));
+        showPermissionAlert();
         return;
       }
 
       Alert.alert(t('notifications.testScheduledTitle'), t('notifications.testScheduledMessage'));
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const handleRequestPermission = async () => {
+    if (isSaving) {
+      return;
+    }
+
+    setIsSaving(true);
+
+    try {
+      const granted = await requestNotificationPermission();
+      await refreshPermissionStatus();
+
+      if (!granted) {
+        showPermissionAlert();
+        return;
+      }
+
+      Alert.alert(t('notifications.permissionGrantedTitle'), t('notifications.permissionGrantedMessage'));
     } finally {
       setIsSaving(false);
     }
@@ -140,6 +210,29 @@ export default function NotificationSettingsScreen({ onBack }: NotificationSetti
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
+        {permissionStatus !== 'granted' ? (
+          <View style={styles.card}>
+            <Text style={styles.sectionTitle}>{t('notifications.permissionCardTitle')}</Text>
+            <Text style={styles.sectionText}>{t('notifications.permissionCardDescription')}</Text>
+            <View style={styles.permissionActions}>
+              <TouchableOpacity
+                style={styles.testButton}
+                onPress={handleRequestPermission}
+                activeOpacity={0.85}
+              >
+                <Text style={styles.testButtonText}>{t('notifications.requestPermissionButton')}</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.secondaryButton}
+                onPress={openSystemSettings}
+                activeOpacity={0.85}
+              >
+                <Text style={styles.secondaryButtonText}>{t('notifications.openSettingsButton')}</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        ) : null}
+
         <View style={styles.card}>
           <View style={styles.row}>
             <View style={styles.rowContent}>
@@ -302,6 +395,22 @@ const styles = StyleSheet.create({
   },
   testButtonText: {
     color: '#FFFFFF',
+    fontSize: 14,
+    fontWeight: '700',
+  },
+  permissionActions: {
+    gap: 10,
+  },
+  secondaryButton: {
+    backgroundColor: '#F0F7F1',
+    borderRadius: 10,
+    paddingVertical: 12,
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#D8EAD9',
+  },
+  secondaryButtonText: {
+    color: '#1B5E20',
     fontSize: 14,
     fontWeight: '700',
   },
