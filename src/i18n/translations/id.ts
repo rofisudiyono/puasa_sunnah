@@ -31,7 +31,7 @@ export const idTranslation = {
   about: {
     title: 'Tentang Aplikasi',
     back: 'Kembali',
-    appName: 'Puasa Sunnah',
+    appName: 'Sunnah Fasting Calendar',
     versionLabel: 'Versi {{version}}',
     description: 'Aplikasi ini membantu menandai dan mempelajari jadwal puasa sepanjang tahun Hijriah, termasuk puasa wajib dan puasa sunnah.',
     sectionApp: 'Tentang',
@@ -39,8 +39,8 @@ export const idTranslation = {
     suggestionDescription: 'Punya ide fitur, koreksi konten, atau masukan UX? Kirim saran langsung ke developer lewat email.',
     emailLabel: 'Email Developer',
     sendSuggestionButton: 'Kirim Saran via Email',
-    emailSubject: 'Saran Aplikasi Puasa Sunnah',
-    emailBody: 'Assalamu\'alaikum, saya ingin memberikan saran untuk aplikasi Puasa Sunnah:\n\n',
+    emailSubject: 'Saran Aplikasi Sunnah Fasting Calendar',
+    emailBody: 'Assalamu\'alaikum, saya ingin memberikan saran untuk aplikasi Sunnah Fasting Calendar:\n\n',
     emailErrorTitle: 'Email Tidak Tersedia',
     emailErrorMessage: 'Aplikasi email tidak ditemukan di perangkat ini.',
     sectionNotification: 'Pengingat Puasa',
@@ -57,7 +57,7 @@ export const idTranslation = {
     sections: {
       introduction: {
         title: 'Pendahuluan',
-        body: 'Puasa Sunnah dirancang untuk membantu pengguna melihat jadwal puasa sunnah dan informasi pendukungnya. Kami menghormati privasi Anda dan berkomitmen menjelaskan data apa yang digunakan di aplikasi ini.',
+        body: 'Sunnah Fasting Calendar dirancang untuk membantu pengguna melihat jadwal puasa sunnah dan informasi pendukungnya. Kami menghormati privasi Anda dan berkomitmen menjelaskan data apa yang digunakan di aplikasi ini.',
       },
       dataCollection: {
         title: 'Data yang Dikumpulkan',
@@ -108,6 +108,11 @@ export const idTranslation = {
     typesTitle: 'Jenis Puasa',
     typesDescription: 'Pilih jenis puasa yang ingin Anda ingatkan.',
     remindAt: 'Dikirim jam 19.00 sehari sebelumnya',
+    testTitle: 'Test Notifikasi',
+    testDescription: 'Kirim notifikasi percobaan untuk memastikan local push notification bekerja di perangkat ini.',
+    testButton: 'Kirim Test Notifikasi',
+    testScheduledTitle: 'Test Dijadwalkan',
+    testScheduledMessage: 'Notifikasi percobaan akan dikirim dalam sekitar 10 detik.',
     permissionTitle: 'Izin Notifikasi Diperlukan',
     permissionMessage: 'Aktifkan izin notifikasi agar pengingat puasa dapat dikirim ke perangkat Anda.',
   },

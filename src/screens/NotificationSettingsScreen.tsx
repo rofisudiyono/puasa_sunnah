@@ -17,6 +17,7 @@ import { normalizeLanguage } from '@/i18n';
 import {
   getSelectableFastingTypes,
   requestNotificationPermission,
+  scheduleTestFastingNotification,
   syncFastingNotifications,
 } from '@/utils/fastingNotifications';
 import {
@@ -98,6 +99,27 @@ export default function NotificationSettingsScreen({ onBack }: NotificationSetti
     }
   };
 
+  const handleSendTestNotification = async () => {
+    if (isSaving) {
+      return;
+    }
+
+    setIsSaving(true);
+
+    try {
+      const scheduled = await scheduleTestFastingNotification(language);
+
+      if (!scheduled) {
+        Alert.alert(t('notifications.permissionTitle'), t('notifications.permissionMessage'));
+        return;
+      }
+
+      Alert.alert(t('notifications.testScheduledTitle'), t('notifications.testScheduledMessage'));
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
   return (
     <View style={styles.root}>
       <StatusBar barStyle="light-content" backgroundColor="#1B5E20" />
@@ -152,6 +174,18 @@ export default function NotificationSettingsScreen({ onBack }: NotificationSetti
               />
             </View>
           ))}
+        </View>
+
+        <View style={styles.card}>
+          <Text style={styles.sectionTitle}>{t('notifications.testTitle')}</Text>
+          <Text style={styles.sectionText}>{t('notifications.testDescription')}</Text>
+          <TouchableOpacity
+            style={styles.testButton}
+            onPress={handleSendTestNotification}
+            activeOpacity={0.85}
+          >
+            <Text style={styles.testButtonText}>{t('notifications.testButton')}</Text>
+          </TouchableOpacity>
         </View>
       </ScrollView>
     </View>
@@ -258,5 +292,17 @@ const styles = StyleSheet.create({
     color: '#5E6A71',
     fontSize: 12,
     marginTop: 2,
+  },
+  testButton: {
+    marginTop: 4,
+    backgroundColor: '#1B5E20',
+    borderRadius: 10,
+    paddingVertical: 12,
+    alignItems: 'center',
+  },
+  testButtonText: {
+    color: '#FFFFFF',
+    fontSize: 14,
+    fontWeight: '700',
   },
 });

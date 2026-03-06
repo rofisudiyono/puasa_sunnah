@@ -31,7 +31,7 @@ export const enTranslation = {
   about: {
     title: 'About App',
     back: 'Back',
-    appName: 'Puasa Sunnah',
+    appName: 'Sunnah Fasting Calendar',
     versionLabel: 'Version {{version}}',
     description: 'This app helps you track and learn fasting schedules across the Hijri year, including obligatory and sunnah fasting.',
     sectionApp: 'About',
@@ -39,8 +39,8 @@ export const enTranslation = {
     suggestionDescription: 'Have feature ideas, content corrections, or UX feedback? Send your suggestion directly by email.',
     emailLabel: 'Developer Email',
     sendSuggestionButton: 'Send Suggestion by Email',
-    emailSubject: 'Puasa Sunnah App Suggestion',
-    emailBody: 'Assalamu\'alaikum, I would like to share a suggestion for the Puasa Sunnah app:\n\n',
+    emailSubject: 'Sunnah Fasting Calendar App Suggestion',
+    emailBody: 'Assalamu\'alaikum, I would like to share a suggestion for the Sunnah Fasting Calendar app:\n\n',
     emailErrorTitle: 'Email Unavailable',
     emailErrorMessage: 'No email application was found on this device.',
     sectionNotification: 'Fasting Reminders',
@@ -57,7 +57,7 @@ export const enTranslation = {
     sections: {
       introduction: {
         title: 'Introduction',
-        body: 'Puasa Sunnah is designed to help users view sunnah fasting schedules and related information. We respect your privacy and are committed to explaining what data is used in this app.',
+        body: 'Sunnah Fasting Calendar is designed to help users view sunnah fasting schedules and related information. We respect your privacy and are committed to explaining what data is used in this app.',
       },
       dataCollection: {
         title: 'Data We Collect',
@@ -108,6 +108,11 @@ export const enTranslation = {
     typesTitle: 'Fasting Types',
     typesDescription: 'Choose which fasting types should trigger reminders.',
     remindAt: 'Sent at 7:00 PM the previous day',
+    testTitle: 'Notification Test',
+    testDescription: 'Send a test notification to verify that local push notifications work on this device.',
+    testButton: 'Send Test Notification',
+    testScheduledTitle: 'Test Scheduled',
+    testScheduledMessage: 'The test notification will be sent in about 10 seconds.',
     permissionTitle: 'Notification Permission Required',
     permissionMessage: 'Enable notification permission so fasting reminders can be delivered to your device.',
   },

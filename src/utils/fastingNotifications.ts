@@ -165,7 +165,10 @@ export async function syncFastingNotifications(language: AppLanguage, options?: 
           fastingTypes: enabledItems.map((item) => item.id),
         },
       },
-      trigger: triggerDate.toDate(),
+      trigger: {
+        type: Notifications.SchedulableTriggerInputTypes.DATE,
+        date: triggerDate.toDate(),
+      },
     });
 
     scheduledIds.push(id);
@@ -176,4 +179,45 @@ export async function syncFastingNotifications(language: AppLanguage, options?: 
 
 export function getSelectableFastingTypes() {
   return FASTING_NOTIFICATION_TYPES;
+}
+
+export async function scheduleTestFastingNotification(language: AppLanguage) {
+  if (!isNativeNotificationsSupported()) {
+    return false;
+  }
+
+  await configureNotificationChannel();
+
+  const granted = await requestNotificationPermission();
+  if (!granted) {
+    return false;
+  }
+
+  const triggerDate = new Date(Date.now() + 10 * 1000);
+  const content = language === 'id'
+    ? {
+        title: 'Test Notifikasi Puasa',
+        body: 'Ini adalah notifikasi percobaan. Jika Anda menerima pesan ini, local push notification sudah bekerja.',
+      }
+    : {
+        title: 'Fasting Notification Test',
+        body: 'This is a test notification. If you receive this message, local push notifications are working.',
+      };
+
+  await Notifications.scheduleNotificationAsync({
+    content: {
+      title: content.title,
+      body: content.body,
+      sound: true,
+      data: {
+        source: 'fasting-reminder-test',
+      },
+    },
+    trigger: {
+      type: Notifications.SchedulableTriggerInputTypes.DATE,
+      date: triggerDate,
+    },
+  });
+
+  return true;
 }
