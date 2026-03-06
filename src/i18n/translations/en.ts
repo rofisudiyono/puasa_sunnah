@@ -122,6 +122,7 @@ export const enTranslation = {
     testScheduledMessage: 'The test notification will be sent in about 10 seconds.',
     permissionTitle: 'Notification Permission Required',
     permissionMessage: 'Enable notification permission so fasting reminders can be delivered to your device.',
+    webUnsupported: 'Notification settings are not available on the web version. This feature is only supported on Android and iOS.',
   },
   puasa: {
     ramadhan: {

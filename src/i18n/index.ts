@@ -8,7 +8,7 @@ export type AppLanguage = 'id' | 'en';
 
 export function normalizeLanguage(language?: string | null): AppLanguage {
   if (!language) {
-    return 'id';
+    return 'en';
   }
 
   return language.toLowerCase().startsWith('id') ? 'id' : 'en';
@@ -16,7 +16,15 @@ export function normalizeLanguage(language?: string | null): AppLanguage {
 
 function resolveDeviceLanguage(): AppLanguage {
   const locale = Localization.getLocales()[0];
-  return normalizeLanguage(locale?.languageCode);
+  const regionCode = locale?.regionCode
+    ?? locale?.languageTag?.split('-')[1]
+    ?? locale?.languageTag?.split('_')[1];
+
+  if (regionCode?.toUpperCase() === 'ID') {
+    return 'id';
+  }
+
+  return 'en';
 }
 
 if (!i18n.isInitialized) {

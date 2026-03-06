@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import {
+  Platform,
   View, Text, ScrollView, TouchableOpacity,
   StyleSheet, StatusBar,
 } from 'react-native';
@@ -322,13 +323,15 @@ export default function CalendarScreen() {
           <Text style={styles.headerTitle}>{t('calendar.title')}</Text>
           <View style={styles.headerActions}>
             <LanguageSwitcher compact />
-            <TouchableOpacity
-              style={styles.headerIconButton}
-              onPress={() => router.push('/notification-settings')}
-              activeOpacity={0.8}
-            >
-              <Text style={styles.headerIconText}>🔔</Text>
-            </TouchableOpacity>
+            {Platform.OS !== 'web' ? (
+              <TouchableOpacity
+                style={styles.headerIconButton}
+                onPress={() => router.push('/notification-settings')}
+                activeOpacity={0.8}
+              >
+                <Text style={styles.headerIconText}>🔔</Text>
+              </TouchableOpacity>
+            ) : null}
             <TouchableOpacity
               style={styles.headerIconButton}
               onPress={() => router.push('/about')}

@@ -4,6 +4,7 @@ import {
   AppState,
   Alert,
   Linking,
+  Platform,
   ScrollView,
   StatusBar,
   StyleSheet,
@@ -62,6 +63,25 @@ export default function NotificationSettingsScreen({ onBack }: NotificationSetti
 
   if (!settings) {
     return null;
+  }
+
+  if (Platform.OS === 'web') {
+    return (
+      <View style={styles.root}>
+        <StatusBar barStyle="light-content" backgroundColor="#1B5E20" />
+
+        <View style={[styles.header, { paddingTop: insets.top + 10 }]}>
+          <View style={styles.headerTopRow}>
+            <TouchableOpacity style={styles.backButton} onPress={onBack} activeOpacity={0.75}>
+              <Text style={styles.backText}>‹ {t('notifications.back')}</Text>
+            </TouchableOpacity>
+            <LanguageSwitcher compact />
+          </View>
+          <Text style={styles.title}>{t('notifications.title')}</Text>
+          <Text style={styles.subtitle}>{t('notifications.webUnsupported')}</Text>
+        </View>
+      </View>
+    );
   }
 
   const refreshPermissionStatus = async () => {

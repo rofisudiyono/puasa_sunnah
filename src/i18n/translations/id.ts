@@ -122,6 +122,7 @@ export const idTranslation = {
     testScheduledMessage: 'Notifikasi percobaan akan dikirim dalam sekitar 10 detik.',
     permissionTitle: 'Izin Notifikasi Diperlukan',
     permissionMessage: 'Aktifkan izin notifikasi agar pengingat puasa dapat dikirim ke perangkat Anda.',
+    webUnsupported: 'Pengaturan notifikasi tidak tersedia di versi web. Fitur ini hanya didukung di Android dan iOS.',
   },
   puasa: {
     ramadhan: {
