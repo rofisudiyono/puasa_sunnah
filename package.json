@@ -10,7 +10,9 @@
     "web": "expo start --web",
     "lint": "expo lint",
     "build:android": "eas build --platform android",
-    "build:ios": "eas build --platform ios"
+    "build:ios": "eas build --platform ios",
+    "ota:preview": "eas update --channel preview --message \"$npm_config_message\"",
+    "ota:production": "eas update --channel production --message \"$npm_config_message\""
   },
   "dependencies": {
     "@react-navigation/bottom-tabs": "^7.7.3",
@@ -30,6 +32,7 @@
     "expo-status-bar": "~55.0.4",
     "expo-symbols": "~55.0.4",
     "expo-system-ui": "~55.0.9",
+    "expo-updates": "~55.0.12",
     "expo-web-browser": "~55.0.9",
     "i18next": "^25.8.14",
     "moment": "^2.30.1",

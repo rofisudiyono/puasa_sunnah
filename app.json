@@ -48,6 +48,12 @@
         "projectId": "6a90c88c-32e7-4a2b-b41a-57d6add3deb0"
       }
     },
-    "owner": "arashy"
+    "owner": "arashy",
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/6a90c88c-32e7-4a2b-b41a-57d6add3deb0"
+    }
   }
 }
