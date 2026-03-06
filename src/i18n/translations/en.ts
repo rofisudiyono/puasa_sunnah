@@ -43,6 +43,9 @@ export const enTranslation = {
     emailBody: 'Assalamu\'alaikum, I would like to share a suggestion for the Puasa Sunnah app:\n\n',
     emailErrorTitle: 'Email Unavailable',
     emailErrorMessage: 'No email application was found on this device.',
+    sectionNotification: 'Fasting Reminders',
+    notificationDescription: 'Manage local notifications per fasting type. Reminders are sent at 7:00 PM on the evening before the fasting day.',
+    notificationButton: 'Open Notification Settings',
     sectionLegal: 'Legal',
     privacyDescription: 'Read the app privacy policy to understand how data is handled.',
     privacyButton: 'Open Privacy Policy',
@@ -95,6 +98,18 @@ export const enTranslation = {
     meaningLabel: 'Meaning:',
     shareButton: '🔗 Share This Fasting Info',
     shareTitle: 'Virtues',
+  },
+  notifications: {
+    title: 'Notification Settings',
+    back: 'Back',
+    description: 'Enable local reminders for specific fasting types. The app will send a notification at 7:00 PM on the day before the fast.',
+    masterTitle: 'Enable Notifications',
+    masterDescription: 'When enabled, the app will schedule local reminders based on the fasting types you choose.',
+    typesTitle: 'Fasting Types',
+    typesDescription: 'Choose which fasting types should trigger reminders.',
+    remindAt: 'Sent at 7:00 PM the previous day',
+    permissionTitle: 'Notification Permission Required',
+    permissionMessage: 'Enable notification permission so fasting reminders can be delivered to your device.',
   },
   puasa: {
     ramadhan: {

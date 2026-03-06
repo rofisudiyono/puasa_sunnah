@@ -20,9 +20,14 @@ const DEVELOPER_EMAIL = 'arashy.sc@gmail.com';
 interface AboutScreenProps {
   onBack: () => void;
   onOpenPrivacyPolicy: () => void;
+  onOpenNotificationSettings: () => void;
 }
 
-export default function AboutScreen({ onBack, onOpenPrivacyPolicy }: AboutScreenProps) {
+export default function AboutScreen({
+  onBack,
+  onOpenPrivacyPolicy,
+  onOpenNotificationSettings,
+}: AboutScreenProps) {
   const { t } = useTranslation();
   const insets = useSafeAreaInsets();
   const appVersion = Constants.expoConfig?.version ?? '1.0.0';
@@ -77,6 +82,18 @@ export default function AboutScreen({ onBack, onOpenPrivacyPolicy }: AboutScreen
             activeOpacity={0.85}
           >
             <Text style={styles.emailButtonText}>{t('about.sendSuggestionButton')}</Text>
+          </TouchableOpacity>
+        </View>
+
+        <View style={styles.card}>
+          <Text style={styles.sectionTitle}>{t('about.sectionNotification')}</Text>
+          <Text style={styles.description}>{t('about.notificationDescription')}</Text>
+          <TouchableOpacity
+            style={styles.secondaryButton}
+            onPress={onOpenNotificationSettings}
+            activeOpacity={0.85}
+          >
+            <Text style={styles.secondaryButtonText}>{t('about.notificationButton')}</Text>
           </TouchableOpacity>
         </View>
 

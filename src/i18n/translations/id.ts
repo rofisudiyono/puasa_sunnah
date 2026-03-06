@@ -43,6 +43,9 @@ export const idTranslation = {
     emailBody: 'Assalamu\'alaikum, saya ingin memberikan saran untuk aplikasi Puasa Sunnah:\n\n',
     emailErrorTitle: 'Email Tidak Tersedia',
     emailErrorMessage: 'Aplikasi email tidak ditemukan di perangkat ini.',
+    sectionNotification: 'Pengingat Puasa',
+    notificationDescription: 'Atur notifikasi lokal per jenis puasa. Pengingat dikirim pukul 19.00 pada malam sebelum hari puasa.',
+    notificationButton: 'Buka Pengaturan Notifikasi',
     sectionLegal: 'Legal',
     privacyDescription: 'Baca kebijakan privasi aplikasi untuk memahami bagaimana data ditangani.',
     privacyButton: 'Buka Privacy Policy',
@@ -95,6 +98,18 @@ export const idTranslation = {
     meaningLabel: 'Artinya:',
     shareButton: '🔗 Bagikan Info Puasa Ini',
     shareTitle: 'Fadilah',
+  },
+  notifications: {
+    title: 'Pengaturan Notifikasi',
+    back: 'Kembali',
+    description: 'Aktifkan pengingat lokal untuk jenis puasa tertentu. Aplikasi akan mengirim notifikasi pukul 19.00 sehari sebelum puasa.',
+    masterTitle: 'Aktifkan Notifikasi',
+    masterDescription: 'Jika aktif, aplikasi akan menjadwalkan pengingat lokal berdasarkan jenis puasa yang Anda pilih.',
+    typesTitle: 'Jenis Puasa',
+    typesDescription: 'Pilih jenis puasa yang ingin Anda ingatkan.',
+    remindAt: 'Dikirim jam 19.00 sehari sebelumnya',
+    permissionTitle: 'Izin Notifikasi Diperlukan',
+    permissionMessage: 'Aktifkan izin notifikasi agar pengingat puasa dapat dikirim ke perangkat Anda.',
   },
   puasa: {
     ramadhan: {

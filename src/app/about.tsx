@@ -10,6 +10,7 @@ export default function AboutRoute() {
     <AboutScreen
       onBack={() => router.back()}
       onOpenPrivacyPolicy={() => router.push('/privacy-policy')}
+      onOpenNotificationSettings={() => router.push('/notification-settings')}
     />
   );
 }
