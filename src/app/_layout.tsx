@@ -5,10 +5,15 @@ import { Alert, Platform, useColorScheme } from 'react-native';
 
 import { AnimatedSplashOverlay } from '@/components/animated-icon';
 import i18n, { normalizeLanguage } from '@/i18n';
-import { getAvailableStoreUpdate, getUpdateAlertCopy, openStoreForUpdate } from '@/utils/appUpdate';
+import {
+  applyOtaUpdateIfAvailable,
+  getAvailableStoreUpdate,
+  getUpdateAlertCopy,
+  openStoreForUpdate,
+} from '@/utils/appUpdate';
 import { syncFastingNotifications } from '@/utils/fastingNotifications';
 
-export default function TabLayout() {
+export default function RootLayout() {
   const colorScheme = useColorScheme();
 
   useEffect(() => {
@@ -20,7 +25,13 @@ export default function TabLayout() {
       return;
     }
 
-    getAvailableStoreUpdate().then((updateInfo) => {
+    (async () => {
+      const otaApplied = await applyOtaUpdateIfAvailable();
+      if (otaApplied) {
+        return;
+      }
+
+      const updateInfo = await getAvailableStoreUpdate();
       if (!updateInfo) {
         return;
       }
@@ -39,13 +50,14 @@ export default function TabLayout() {
           },
         },
       ]);
-    });
+    })();
   }, []);
 
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
       <AnimatedSplashOverlay />
       <Stack screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="(tabs)" />
         <Stack.Screen name="index" />
         <Stack.Screen
           name="about"
@@ -67,6 +79,12 @@ export default function TabLayout() {
         />
         <Stack.Screen
           name="notification-settings"
+          options={{
+            animation: 'slide_from_right',
+          }}
+        />
+        <Stack.Screen
+          name="puasa-list"
           options={{
             animation: 'slide_from_right',
           }}

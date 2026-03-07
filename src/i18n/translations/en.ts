@@ -2,10 +2,17 @@ export const enTranslation = {
   common: {
     language: 'Language',
   },
+  tabs: {
+    calendar: 'Calendar',
+    settings: 'Settings',
+  },
   calendar: {
     title: 'Fasting Calendar',
     empty: 'No sunnah fasting scheduled today',
     availableFastings: '{{count}} Fasts Available',
+    learnEyebrow: 'Learn',
+    learnTitle: 'Browse All Fasting Types',
+    learnDescription: 'Open the available fasting list and study each one in detail.',
     aboutButton: 'About',
     legendTitle: 'Color Legend',
     compactLabel: '2-week view',
@@ -27,6 +34,19 @@ export const enTranslation = {
       dzulhijjah: 'Dhul Hijjah',
       rajab: 'Rajab',
     },
+  },
+  settings: {
+    title: 'Settings',
+    subtitle: 'Manage app notifications and view information about the application.',
+    notificationsTitle: 'Notification Settings',
+    notificationsDescription: 'Choose which fasting reminders should stay active.',
+    aboutTitle: 'About App',
+    aboutDescription: 'See app version, send feedback, and read legal information.',
+  },
+  listPuasa: {
+    title: 'Fasting List',
+    subtitle: 'Choose one fasting type to learn in more detail.',
+    back: 'Back',
   },
   about: {
     title: 'About App',

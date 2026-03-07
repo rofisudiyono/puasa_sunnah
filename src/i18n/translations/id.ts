@@ -2,10 +2,17 @@ export const idTranslation = {
   common: {
     language: 'Bahasa',
   },
+  tabs: {
+    calendar: 'Kalender',
+    settings: 'Pengaturan',
+  },
   calendar: {
     title: 'Kalender Puasa',
     empty: 'Tidak ada puasa sunnah hari ini',
     availableFastings: '{{count}} Puasa Tersedia',
+    learnEyebrow: 'Belajar',
+    learnTitle: 'Lihat Semua Jenis Puasa',
+    learnDescription: 'Buka daftar puasa yang tersedia lalu pelajari satu per satu.',
     aboutButton: 'Tentang',
     legendTitle: 'Keterangan Warna',
     compactLabel: 'Tampilan 2 minggu',
@@ -27,6 +34,19 @@ export const idTranslation = {
       dzulhijjah: 'Dzulhijjah',
       rajab: 'Rajab',
     },
+  },
+  settings: {
+    title: 'Pengaturan',
+    subtitle: 'Kelola notifikasi aplikasi dan lihat informasi tentang aplikasi.',
+    notificationsTitle: 'Pengaturan Notifikasi',
+    notificationsDescription: 'Atur reminder puasa yang ingin diaktifkan.',
+    aboutTitle: 'Tentang Aplikasi',
+    aboutDescription: 'Lihat versi aplikasi, kirim saran, dan baca informasi legal.',
+  },
+  listPuasa: {
+    title: 'Daftar Puasa',
+    subtitle: 'Pilih satu jenis puasa untuk dipelajari lebih dalam.',
+    back: 'Kembali',
   },
   about: {
     title: 'Tentang Aplikasi',

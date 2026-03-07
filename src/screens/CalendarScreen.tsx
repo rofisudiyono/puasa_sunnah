@@ -2,7 +2,6 @@ import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import {
-  Platform,
   View, Text, ScrollView, TouchableOpacity,
   StyleSheet, StatusBar,
 } from 'react-native';
@@ -323,28 +322,27 @@ export default function CalendarScreen() {
           <Text style={styles.headerTitle}>{t('calendar.title')}</Text>
           <View style={styles.headerActions}>
             <LanguageSwitcher compact />
-            {Platform.OS !== 'web' ? (
-              <TouchableOpacity
-                style={styles.headerIconButton}
-                onPress={() => router.push('/notification-settings')}
-                activeOpacity={0.8}
-              >
-                <Text style={styles.headerIconText}>🔔</Text>
-              </TouchableOpacity>
-            ) : null}
-            <TouchableOpacity
-              style={styles.headerIconButton}
-              onPress={() => router.push('/about')}
-              activeOpacity={0.8}
-            >
-              <Text style={styles.headerIconText}>i</Text>
-            </TouchableOpacity>
           </View>
         </View>
         <Text style={styles.headerSubtitle}>{hijri.fullDate}</Text>
       </View>
 
       <ScrollView showsVerticalScrollIndicator={false}>
+        <TouchableOpacity
+          style={styles.learnCard}
+          onPress={() => router.push('/puasa-list')}
+          activeOpacity={0.86}
+        >
+          <View style={styles.learnCardText}>
+            <Text style={styles.learnEyebrow}>{t('calendar.learnEyebrow')}</Text>
+            <Text style={styles.learnTitle}>{t('calendar.learnTitle')}</Text>
+            <Text style={styles.learnDescription}>{t('calendar.learnDescription')}</Text>
+          </View>
+          <View style={styles.learnArrowWrap}>
+            <Text style={styles.learnArrow}>›</Text>
+          </View>
+        </TouchableOpacity>
+
         <View style={styles.calendarWrapper}>
           {isCompactCalendar ? (
             <CompactCalendar
@@ -497,22 +495,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 10,
   },
-  headerIconButton: {
-    backgroundColor: 'rgba(255,255,255,0.2)',
-    borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.4)',
-    borderRadius: 15,
-    width: 30,
-    height: 30,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  headerIconText: {
-    color: '#FFFFFF',
-    fontSize: 16,
-    fontWeight: '800',
-    lineHeight: 18,
-  },
   headerTitle: {
     flex: 1,
     fontSize: 22,
@@ -525,6 +507,50 @@ const styles = StyleSheet.create({
     fontSize: 13,
     color: '#A5D6A7',
     marginTop: 10,
+  },
+  learnCard: {
+    marginTop: 16,
+    marginHorizontal: 16,
+    marginBottom: 8,
+    backgroundColor: '#173F27',
+    borderRadius: 18,
+    padding: 18,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 14,
+  },
+  learnCardText: {
+    flex: 1,
+    gap: 4,
+  },
+  learnEyebrow: {
+    color: 'rgba(255,255,255,0.72)',
+    fontSize: 11,
+    fontWeight: '700',
+    textTransform: 'uppercase',
+    letterSpacing: 0.8,
+  },
+  learnTitle: {
+    color: '#FFFFFF',
+    fontSize: 18,
+    fontWeight: '800',
+  },
+  learnDescription: {
+    color: 'rgba(255,255,255,0.82)',
+    fontSize: 13,
+    lineHeight: 19,
+  },
+  learnArrowWrap: {
+    width: 38,
+    height: 38,
+    borderRadius: 19,
+    backgroundColor: 'rgba(255,255,255,0.14)',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  learnArrow: {
+    color: '#FFFFFF',
+    fontSize: 22,
   },
   calendarWrapper: {
     backgroundColor: '#fff',

@@ -1,4 +1,5 @@
 import Constants from 'expo-constants';
+import * as Updates from 'expo-updates';
 import { Linking, Platform } from 'react-native';
 
 import type { AppLanguage } from '@/i18n';
@@ -117,6 +118,29 @@ export async function getAvailableStoreUpdate(): Promise<UpdateInfo | null> {
   }
 
   return null;
+}
+
+export async function applyOtaUpdateIfAvailable() {
+  if (Platform.OS === 'web' || !Updates.isEnabled) {
+    return false;
+  }
+
+  try {
+    const updateResult = await Updates.checkForUpdateAsync();
+    if (!updateResult.isAvailable) {
+      return false;
+    }
+
+    const fetchResult = await Updates.fetchUpdateAsync();
+    if (fetchResult.isNew) {
+      await Updates.reloadAsync();
+      return true;
+    }
+  } catch {
+    return false;
+  }
+
+  return false;
 }
 
 export async function openStoreForUpdate(url: string) {
